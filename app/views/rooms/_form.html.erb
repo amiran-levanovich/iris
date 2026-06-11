@@ -1,0 +1,37 @@
+<%= form_with model: room.new_record? ? [ room.property, room ] : room do |form| %>
+  <%= render "shared/form_errors", record: room %>
+
+  <div>
+    <%= form.label :number %>
+    <%= form.text_field :number %>
+  </div>
+
+  <div>
+    <%= form.label :room_type %>
+    <%= form.select :room_type, Room.room_types.keys.map { |type| [ human_enum(room, :room_type, type), type ] } %>
+  </div>
+
+  <div>
+    <%= form.label :capacity %>
+    <%= form.number_field :capacity, min: 1 %>
+  </div>
+
+  <div>
+    <%= form.label :nightly_rate_cents %>
+    <%= form.number_field :nightly_rate_cents, min: 0 %>
+  </div>
+
+  <div>
+    <%= form.label :floor %>
+    <%= form.number_field :floor %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

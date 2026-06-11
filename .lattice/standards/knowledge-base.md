@@ -60,6 +60,7 @@ spec/                  # RSpec (models/, requests/, system/, factories/)
 
 - FactoryBot is included in RSpec config (`create`/`build` available without the `FactoryBot.` prefix).
 - Feature-level decisions are captured in `.lattice/context/` documents, not in code comments.
+- **No hardcoded user-facing strings**: all UI text, flash messages, labels, and mailer subjects go through Rails I18n (`config/locales/en.yml`, rails-i18n gem). Lazy lookup (`t(".key")`) in controllers/views; enum labels via `human_enum` helper (`activerecord.attributes.<model>.<enum_plural>.<value>`). `raise_on_missing_translations` is on in dev/test.
 
 ---
 *Generated for Iris on 2026-06-11. Mode: override.*

@@ -1,0 +1,50 @@
+<h1><%= @property.name %></h1>
+
+<p>
+  <%= [ @property.street, @property.postal_code, @property.city, @property.country ].select(&:present?).join(", ") %>
+</p>
+
+<% if @property.description.present? %>
+  <p><%= @property.description %></p>
+<% end %>
+
+<p>
+  <%= link_to t(".edit"), edit_property_path(@property) %> |
+  <%= link_to t(".back"), properties_path %>
+</p>
+
+<h2><%= t(".rooms") %></h2>
+
+<%= link_to t(".new_room"), new_property_room_path(@property) %>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= Room.human_attribute_name(:number) %></th>
+      <th><%= Room.human_attribute_name(:room_type) %></th>
+      <th><%= Room.human_attribute_name(:capacity) %></th>
+      <th><%= Room.human_attribute_name(:nightly_rate_cents) %></th>
+      <th><%= Room.human_attribute_name(:floor) %></th>
+      <th><%= Room.human_attribute_name(:status) %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @property.rooms.each do |room| %>
+      <tr>
+        <td><%= room.number %></td>
+        <td><%= human_enum(room, :room_type) %></td>
+        <td><%= room.capacity %></td>
+        <td><%= number_to_currency(room.nightly_rate_cents / 100.0) %></td>
+        <td><%= room.floor %></td>
+        <td><%= human_enum(room, :status) %></td>
+        <td>
+          <%= link_to t(".edit_room"), edit_room_path(room) %>
+          <% (Room.statuses.keys - [ room.status ]).each do |target| %>
+            <%= button_to human_enum(room, :status, target), status_room_path(room, status: target), method: :patch %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

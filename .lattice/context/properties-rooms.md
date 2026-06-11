@@ -22,6 +22,8 @@ created: "2026-06-11"
 | 2026-06-11 | Shallow nesting for rooms | edit/update/status don't need property in URL; create does | Full nesting |
 | 2026-06-11 | No service objects in this feature | Every write is single-aggregate; services would be anemic per architecture.md anti-patterns | Service per use case |
 | 2026-06-11 | Design approved at Level 4. Blueprint complete, ready for implementation | All four levels walked and approved | — |
+| 2026-06-11 | All user-facing strings via Rails I18n (rails-i18n gem, en.yml, lazy lookup, human_enum helper); raise_on_missing_translations on in dev/test | User direction: industry standard; applied to feature + generated auth code + mailer | Hardcoded English strings |
+| 2026-06-11 | Implementation deviation: `root "properties#index"` added | Auth redirects to root after login; app had no root route | Dedicated dashboard route |
 
 ## Open Questions
 
