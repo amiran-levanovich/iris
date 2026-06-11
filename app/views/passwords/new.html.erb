@@ -1,8 +1,10 @@
-<h1><%= t(".title") %></h1>
+<span class="auth-brand"><%= t("layouts.application.brand") %></span>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<div class="auth-card">
+  <h1><%= t(".title") %></h1>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t(".email_placeholder"), value: params[:email_address] %><br>
-  <%= form.submit t(".submit") %>
-<% end %>
+  <%= form_with url: passwords_path do |form| %>
+    <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t(".email_placeholder"), value: params[:email_address] %>
+    <%= form.submit t(".submit") %>
+  <% end %>
+</div>

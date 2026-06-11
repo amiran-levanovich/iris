@@ -18,6 +18,17 @@ RSpec.describe "Rooms", type: :request do
       end
     end
 
+    context "with an unknown room type" do
+      it "re-renders the form instead of raising" do
+        expect {
+          post property_rooms_path(property),
+               params: { room: { number: "101", room_type: "igloo", capacity: 2, nightly_rate_cents: 9_000 } }
+        }.not_to change(Room, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     context "with a duplicate number in the property" do
       it "re-renders the form with errors" do
         create(:room, property: property, number: "101")

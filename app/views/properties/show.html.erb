@@ -1,6 +1,12 @@
-<h1><%= @property.name %></h1>
+<div class="page-head">
+  <h1>
+    <%= @property.name %>
+    <% if @property.stars.present? %><span class="stars"><%= "★" * @property.stars %></span><% end %>
+  </h1>
+  <%= link_to t(".edit"), edit_property_path(@property), class: "btn btn-quiet" %>
+</div>
 
-<p>
+<p class="address">
   <%= [ @property.street, @property.postal_code, @property.city, @property.country ].select(&:present?).join(", ") %>
 </p>
 
@@ -8,43 +14,30 @@
   <p><%= @property.description %></p>
 <% end %>
 
-<p>
-  <%= link_to t(".edit"), edit_property_path(@property) %> |
-  <%= link_to t(".back"), properties_path %>
-</p>
+<div class="page-head">
+  <h2><%= t(".rooms") %></h2>
+  <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
+</div>
 
-<h2><%= t(".rooms") %></h2>
-
-<%= link_to t(".new_room"), new_property_room_path(@property) %>
-
-<table>
-  <thead>
-    <tr>
-      <th><%= Room.human_attribute_name(:number) %></th>
-      <th><%= Room.human_attribute_name(:room_type) %></th>
-      <th><%= Room.human_attribute_name(:capacity) %></th>
-      <th><%= Room.human_attribute_name(:nightly_rate_cents) %></th>
-      <th><%= Room.human_attribute_name(:floor) %></th>
-      <th><%= Room.human_attribute_name(:status) %></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @property.rooms.each do |room| %>
+<% if @property.rooms.any? %>
+  <table class="room-board">
+    <thead>
       <tr>
-        <td><%= room.number %></td>
-        <td><%= human_enum(room, :room_type) %></td>
-        <td><%= room.capacity %></td>
-        <td><%= number_to_currency(room.nightly_rate_cents / 100.0) %></td>
-        <td><%= room.floor %></td>
-        <td><%= human_enum(room, :status) %></td>
-        <td>
-          <%= link_to t(".edit_room"), edit_room_path(room) %>
-          <% (Room.statuses.keys - [ room.status ]).each do |target| %>
-            <%= button_to human_enum(room, :status, target), status_room_path(room, status: target), method: :patch %>
-          <% end %>
-        </td>
+        <th><%= Room.human_attribute_name(:number) %></th>
+        <th><%= Room.human_attribute_name(:room_type) %></th>
+        <th><%= Room.human_attribute_name(:capacity) %></th>
+        <th><%= Room.human_attribute_name(:nightly_rate_cents) %></th>
+        <th><%= Room.human_attribute_name(:floor) %></th>
+        <th><%= Room.human_attribute_name(:status) %></th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <%= render partial: "rooms/room", collection: @property.rooms %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty"><%= t(".empty_rooms") %></p>
+<% end %>
+
+<%= link_to t(".back"), properties_path, class: "back-link" %>
