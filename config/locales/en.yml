@@ -1,31 +1,109 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      property:
+        name: Name
+        street: Street
+        city: City
+        postal_code: Postal code
+        country: Country
+        description: Description
+        stars: Stars
+      room:
+        number: Number
+        room_type: Type
+        capacity: Capacity
+        nightly_rate_cents: Nightly rate (cents)
+        floor: Floor
+        status: Status
+        room_types:
+          single: Single
+          double: Double
+          twin: Twin
+          suite: Suite
+          family: Family
+          deluxe: Deluxe
+          penthouse: Penthouse
+        statuses:
+          operational: Operational
+          cleaning: Cleaning
+          out_of_service: Out of service
+
+  number:
+    currency:
+      format:
+        unit: "€"
+
+  shared:
+    errors:
+      heading:
+        one: "1 error prevented saving:"
+        other: "%{count} errors prevented saving:"
+
+  properties:
+    index:
+      title: Properties
+      new_property: New property
+    show:
+      edit: Edit property
+      back: Back to properties
+      rooms: Rooms
+      new_room: New room
+      edit_room: Edit
+    new:
+      title: New property
+      back: Back to properties
+    edit:
+      title: Edit property
+      back: Back to property
+    create:
+      notice: Property created.
+    update:
+      notice: Property updated.
+
+  rooms:
+    new:
+      title: "New room — %{property}"
+      back: Back to property
+    edit:
+      title: "Edit room %{number} — %{property}"
+      back: Back to property
+    create:
+      notice: Room created.
+    update:
+      notice: Room updated.
+    status:
+      notice: Room status updated.
+      alert: Unknown room status.
+
+  sessions:
+    new:
+      email_placeholder: Enter your email address
+      password_placeholder: Enter your password
+      sign_in: Sign in
+      forgot_password: Forgot password?
+    create:
+      alert: Try another email address or password.
+      rate_limited: Try again later.
+
+  passwords:
+    new:
+      title: Forgot your password?
+      email_placeholder: Enter your email address
+      submit: Email reset instructions
+    edit:
+      title: Update your password
+      password_placeholder: Enter new password
+      password_confirmation_placeholder: Repeat new password
+      submit: Save
+    create:
+      notice: Password reset instructions sent (if user with that email address exists).
+      rate_limited: Try again later.
+    update:
+      notice: Password has been reset.
+      alert: Passwords did not match.
+    invalid_token_alert: Password reset link is invalid or has expired.
+
+  passwords_mailer:
+    reset:
+      subject: Reset your password

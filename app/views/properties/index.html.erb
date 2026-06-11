@@ -1,0 +1,13 @@
+<h1><%= t(".title") %></h1>
+
+<%= link_to t(".new_property"), new_property_path %>
+
+<ul>
+  <% @properties.each do |property| %>
+    <li>
+      <%= link_to property.name, property_path(property) %>
+      <% if property.city.present? %>— <%= property.city %><% end %>
+      <% if property.stars.present? %>(<%= "★" * property.stars %>)<% end %>
+    </li>
+  <% end %>
+</ul>
