@@ -1,4 +1,4 @@
-<%= form_with model: room.new_record? ? [ room.property, room ] : room do |form| %>
+<%= form_with model: room.new_record? ? [ room.property, room ] : room, class: "form" do |form| %>
   <%= render "shared/form_errors", record: room %>
 
   <div>

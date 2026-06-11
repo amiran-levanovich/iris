@@ -7,9 +7,9 @@ class RoomsController < ApplicationController
   end
 
   def create
-    @room = @property.rooms.build(room_params)
+    @room = @property.rooms.build
 
-    if @room.save
+    if assign_room_attributes(@room) && @room.save
       redirect_to @property, notice: t(".notice")
     else
       render :new, status: :unprocessable_entity
@@ -20,7 +20,7 @@ class RoomsController < ApplicationController
   end
 
   def update
-    if @room.update(room_params)
+    if assign_room_attributes(@room) && @room.save
       redirect_to @room.property, notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
@@ -35,6 +35,16 @@ class RoomsController < ApplicationController
   end
 
   private
+
+  # String enums raise ArgumentError on unknown values instead of failing
+  # validation, so the HTTP boundary maps that to a form error, not a 500.
+  def assign_room_attributes(room)
+    room.assign_attributes(room_params)
+    true
+  rescue ArgumentError
+    room.errors.add(:room_type, :invalid)
+    false
+  end
 
   def set_property
     @property = Property.find(params.expect(:property_id))

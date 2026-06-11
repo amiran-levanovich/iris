@@ -1,0 +1,16 @@
+<tr>
+  <td><span class="room-tag"><%= room.number %></span></td>
+  <td><%= human_enum(room, :room_type) %></td>
+  <td><%= room.capacity %></td>
+  <td class="num"><%= number_to_currency(room.nightly_rate_cents / 100.0) %></td>
+  <td class="num"><%= room.floor %></td>
+  <td><span class="status status-<%= room.status %>"><%= human_enum(room, :status) %></span></td>
+  <td>
+    <div class="room-actions">
+      <%= link_to t(".edit"), edit_room_path(room), class: "btn" %>
+      <% (Room.statuses.keys - [ room.status ]).each do |target| %>
+        <%= button_to human_enum(room, :status, target), status_room_path(room, status: target), method: :patch %>
+      <% end %>
+    </div>
+  </td>
+</tr>

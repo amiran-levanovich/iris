@@ -24,6 +24,17 @@ created: "2026-06-11"
 | 2026-06-11 | Design approved at Level 4. Blueprint complete, ready for implementation | All four levels walked and approved | — |
 | 2026-06-11 | All user-facing strings via Rails I18n (rails-i18n gem, en.yml, lazy lookup, human_enum helper); raise_on_missing_translations on in dev/test | User direction: industry standard; applied to feature + generated auth code + mailer | Hardcoded English strings |
 | 2026-06-11 | Implementation deviation: `root "properties#index"` added | Auth redirects to root after login; app had no root route | Dedicated dashboard route |
+| 2026-06-11 | Visual identity: "Iris ops console" — violet-ink palette from the iris flower, Bricolage Grotesque/Public Sans/IBM Plex Mono, key-fob room chips, iris-eye status badges; plain CSS tokens in application.css | Subject-grounded, modern, no CSS framework per stack constraints | Dark variant; Tailwind |
+| 2026-06-11 | Review fix: enum params guarded at HTTP boundary (assign_room_attributes rescues ArgumentError → 422) | Rails string enums raise on unknown mass-assigned values; form select is not the trust boundary | Inclusion validation on raw attribute |
+
+## Key Files
+
+- `app/assets/stylesheets/application.css` — design tokens + components (Views)
+- `app/views/layouts/application.html.erb` — topbar, centralized flash, fonts (Views)
+- `app/views/rooms/_room.html.erb` — room board row partial with status actions (Views)
+- `app/controllers/rooms_controller.rb` — aggregate-scoped CRUD + status, enum guard (Controllers)
+- `app/models/property.rb`, `app/models/room.rb` — aggregate (Models)
+- `config/locales/en.yml` — all user-facing strings
 
 ## Open Questions
 

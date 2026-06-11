@@ -18,12 +18,35 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="<%= authenticated? ? "app" : "auth" %>">
+    <% if authenticated? %>
+      <header class="topbar">
+        <%= link_to t("layouts.application.brand"), root_path, class: "brand" %>
+        <nav>
+          <%= link_to t("layouts.application.properties"), properties_path %>
+        </nav>
+        <%= button_to t("layouts.application.sign_out"), session_path, method: :delete, class: "btn btn-quiet" %>
+      </header>
+    <% end %>
+
+    <% if flash[:notice] %>
+      <div class="flash flash-notice" role="status"><%= flash[:notice] %></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="flash flash-alert" role="alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>

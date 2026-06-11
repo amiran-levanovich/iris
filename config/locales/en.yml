@@ -34,6 +34,12 @@ en:
       format:
         unit: "€"
 
+  layouts:
+    application:
+      brand: Iris
+      properties: Properties
+      sign_out: Sign out
+
   shared:
     errors:
       heading:
@@ -44,12 +50,13 @@ en:
     index:
       title: Properties
       new_property: New property
+      empty: No properties yet. Create the first one to start managing rooms.
     show:
       edit: Edit property
       back: Back to properties
       rooms: Rooms
       new_room: New room
-      edit_room: Edit
+      empty_rooms: No rooms yet. Add the first room to build this property's inventory.
     new:
       title: New property
       back: Back to properties
@@ -62,6 +69,8 @@ en:
       notice: Property updated.
 
   rooms:
+    room:
+      edit: Edit
     new:
       title: "New room — %{property}"
       back: Back to property
@@ -78,6 +87,7 @@ en:
 
   sessions:
     new:
+      title: Sign in to your workspace
       email_placeholder: Enter your email address
       password_placeholder: Enter your password
       sign_in: Sign in
