@@ -1,0 +1,11 @@
+# .lattice/config.yaml -- Lattice Framework Configuration
+# All paths are relative to the repository root.
+
+version: 1
+language: ruby
+paths:
+  knowledge_base: .lattice/standards/knowledge-base.md
+  language_idioms: .lattice/standards/language-idioms.md
+  architecture: .lattice/standards/architecture.md
+  ddd_principles: .lattice/standards/ddd-principles.md
+architecture_mode: custom
