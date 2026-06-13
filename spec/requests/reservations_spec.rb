@@ -19,17 +19,6 @@ RSpec.describe "Reservations", type: :request do
     }
   end
 
-  describe "GET /properties/:property_id/reservations" do
-    it "renders the house view" do
-      create(:reservation, :checked_in, room: room, guest: guest)
-
-      get property_reservations_path(property)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include(guest.name)
-    end
-  end
-
   describe "GET /properties/:property_id/reservations/new" do
     it "renders the booking form with available rooms" do
       room
@@ -43,12 +32,12 @@ RSpec.describe "Reservations", type: :request do
 
   describe "POST /properties/:property_id/reservations" do
     context "with valid params" do
-      it "books the room and redirects to the house view" do
+      it "books the room and redirects to the property page" do
         expect {
           post property_reservations_path(property), params: booking_params
         }.to change(Reservation, :count).by(1)
 
-        expect(response).to redirect_to(property_reservations_path(property))
+        expect(response).to redirect_to(property_path(property))
         expect(Reservation.last.nightly_rate_cents).to eq(room.nightly_rate_cents)
       end
     end
@@ -84,7 +73,7 @@ RSpec.describe "Reservations", type: :request do
       patch check_in_reservation_path(reservation)
 
       expect(reservation.reload).to be_checked_in
-      expect(response).to redirect_to(property_reservations_path(property))
+      expect(response).to redirect_to(property_path(property))
     end
   end
 
@@ -96,7 +85,7 @@ RSpec.describe "Reservations", type: :request do
 
       expect(reservation.reload).to be_checked_out
       expect(room.reload).to be_cleaning
-      expect(response).to redirect_to(property_reservations_path(property))
+      expect(response).to redirect_to(property_path(property))
     end
 
     context "when the reservation was never checked in" do
@@ -106,7 +95,7 @@ RSpec.describe "Reservations", type: :request do
         patch check_out_reservation_path(reservation)
 
         expect(reservation.reload).to be_booked
-        expect(response).to redirect_to(property_reservations_path(property))
+        expect(response).to redirect_to(property_path(property))
         expect(flash[:alert]).to be_present
       end
     end
@@ -119,7 +108,7 @@ RSpec.describe "Reservations", type: :request do
       patch cancel_reservation_path(reservation)
 
       expect(reservation.reload).to be_cancelled
-      expect(response).to redirect_to(property_reservations_path(property))
+      expect(response).to redirect_to(property_path(property))
     end
   end
 end

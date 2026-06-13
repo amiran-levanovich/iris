@@ -1,0 +1,11 @@
+<li class="movement">
+  <%= link_to movement.guest.name, guest_path(movement.guest), class: "movement-guest" %>
+  <span class="room-tag"><%= movement.room.number %></span>
+  <span class="movement-action">
+    <% if movement.may_check_in? %>
+      <%= button_to t("reservations.actions.check_in"), check_in_reservation_path(movement), method: :patch %>
+    <% elsif movement.may_check_out? %>
+      <%= button_to t("reservations.actions.check_out"), check_out_reservation_path(movement), method: :patch %>
+    <% end %>
+  </span>
+</li>

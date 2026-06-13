@@ -1,19 +1,12 @@
 class ReservationsController < ApplicationController
-  before_action :set_property, only: %i[ index new create ]
+  before_action :set_property, only: %i[ new create ]
   before_action :set_reservation, only: %i[ check_in check_out cancel ]
 
   # An illegal lifecycle move (e.g. checking out a reservation that was never
   # checked in) is a user action against stale state, not a server fault.
   rescue_from AASM::InvalidTransition do
-    redirect_to property_reservations_path(@reservation.room.property),
+    redirect_to property_path(@reservation.room.property),
                 alert: t("reservations.invalid_transition")
-  end
-
-  def index
-    today = Date.current
-    @arrivals = @property.reservations.arriving_on(today).includes(:guest, :room)
-    @departures = @property.reservations.departing_on(today).includes(:guest, :room)
-    @in_house = @property.reservations.checked_in.includes(:guest, :room)
   end
 
   def new
@@ -29,7 +22,7 @@ class ReservationsController < ApplicationController
     guest = Guest.find(booking[:guest_id])
 
     Reservations::BookRoom.call(room:, guest:, stay_period: @stay_period)
-    redirect_to property_reservations_path(@property), notice: t(".notice")
+    redirect_to @property, notice: t(".notice")
   rescue Reservations::RoomUnavailableError
     setup_booking_form
     flash.now[:alert] = t(".unavailable")
@@ -42,17 +35,17 @@ class ReservationsController < ApplicationController
 
   def check_in
     @reservation.check_in!
-    redirect_to property_reservations_path(property_for(@reservation)), notice: t(".notice")
+    redirect_to property_for(@reservation), notice: t(".notice")
   end
 
   def check_out
     Reservations::CheckOut.call(reservation: @reservation)
-    redirect_to property_reservations_path(property_for(@reservation)), notice: t(".notice")
+    redirect_to property_for(@reservation), notice: t(".notice")
   end
 
   def cancel
     @reservation.cancel!
-    redirect_to property_reservations_path(property_for(@reservation)), notice: t(".notice")
+    redirect_to property_for(@reservation), notice: t(".notice")
   end
 
   private

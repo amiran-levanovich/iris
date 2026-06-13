@@ -15,11 +15,30 @@
 <% end %>
 
 <div class="page-head">
+  <h2><%= t(".today") %></h2>
+  <%= link_to t(".new_reservation"), new_property_reservation_path(@property), class: "btn" %>
+</div>
+
+<% movement_groups = { arrivals: @arrivals, departures: @departures, in_house: @in_house } %>
+
+<div class="movements">
+  <% movement_groups.each do |name, movements| %>
+    <section class="movements-col movements-<%= name %>">
+      <h3><%= t(".#{name}") %> <span class="count"><%= movements.size %></span></h3>
+      <% if movements.any? %>
+        <ul>
+          <%= render partial: "properties/movement", collection: movements, as: :movement %>
+        </ul>
+      <% else %>
+        <p class="empty"><%= t(".empty_#{name}") %></p>
+      <% end %>
+    </section>
+  <% end %>
+</div>
+
+<div class="page-head">
   <h2><%= t(".rooms") %></h2>
-  <div class="room-actions">
-    <%= link_to t(".reservations"), property_reservations_path(@property), class: "btn btn-quiet" %>
-    <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
-  </div>
+  <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
 </div>
 
 <% if @property.rooms.any? %>

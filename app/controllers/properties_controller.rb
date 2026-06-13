@@ -11,6 +11,11 @@ class PropertiesController < ApplicationController
                                        .where(room: @property.rooms)
                                        .includes(:guest)
                                        .index_by(&:room_id)
+
+    today = Date.current
+    @arrivals = @property.reservations.arriving_on(today).includes(:guest, :room)
+    @departures = @property.reservations.departing_on(today).includes(:guest, :room)
+    @in_house = @property.reservations.checked_in.includes(:guest, :room)
   end
 
   def new

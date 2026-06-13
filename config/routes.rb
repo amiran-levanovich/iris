@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :reservations, only: %i[ index new create ], shallow: true do
+    resources :reservations, only: %i[ new create ], shallow: true do
       member do
         patch :check_in
         patch :check_out
