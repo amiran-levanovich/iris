@@ -6,6 +6,13 @@
   <td class="num"><%= room.floor %></td>
   <td><span class="status status-<%= room.status %>"><%= human_enum(room, :status) %></span></td>
   <td>
+    <% if (reservation = current_reservations[room.id]) %>
+      <%= link_to reservation.guest.name, guest_path(reservation.guest) %>
+    <% else %>
+      <span class="muted">—</span>
+    <% end %>
+  </td>
+  <td>
     <div class="room-actions">
       <%= link_to t(".edit"), edit_room_path(room), class: "btn" %>
       <% (Room.statuses.keys - [ room.status ]).each do |target| %>

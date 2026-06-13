@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_195213) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_13_120001) do
+  create_table "guests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "name", null: false
+    t.string "phone"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_guests_on_email", unique: true, where: "email IS NOT NULL"
+  end
+
   create_table "properties", force: :cascade do |t|
     t.string "city"
     t.string "country"
@@ -21,6 +30,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_195213) do
     t.integer "stars"
     t.string "street"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.date "check_in_on", null: false
+    t.date "check_out_on", null: false
+    t.datetime "created_at", null: false
+    t.integer "guest_id", null: false
+    t.integer "nightly_rate_cents", null: false
+    t.integer "room_id", null: false
+    t.string "status", default: "booked", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guest_id"], name: "index_reservations_on_guest_id"
+    t.index ["room_id", "check_in_on"], name: "index_reservations_on_room_id_and_check_in_on"
+    t.index ["room_id"], name: "index_reservations_on_room_id"
+    t.index ["status"], name: "index_reservations_on_status"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -55,6 +79,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_195213) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "reservations", "guests"
+  add_foreign_key "reservations", "rooms"
   add_foreign_key "rooms", "properties"
   add_foreign_key "sessions", "users"
 end

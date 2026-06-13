@@ -1,0 +1,21 @@
+<div class="page-head">
+  <h1><%= t(".title") %></h1>
+  <%= link_to t(".new_guest"), new_guest_path, class: "btn" %>
+</div>
+
+<% if @guests.any? %>
+  <ul class="property-grid">
+    <% @guests.each do |guest| %>
+      <li>
+        <%= link_to guest_path(guest), class: "property-card" do %>
+          <h2><%= guest.name %></h2>
+          <div class="meta">
+            <span><%= [ guest.email, guest.phone ].select(&:present?).join(" · ") %></span>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="empty"><%= t(".empty") %></p>
+<% end %>

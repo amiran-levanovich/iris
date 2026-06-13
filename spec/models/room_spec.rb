@@ -71,4 +71,43 @@ RSpec.describe Room, type: :model do
       expect(create(:room)).to be_operational
     end
   end
+
+  describe ".available_between" do
+    let(:period) { StayPeriod.new(check_in: Date.new(2026, 6, 10), check_out: Date.new(2026, 6, 15)) }
+
+    it "includes a free operational room" do
+      room = create(:room)
+
+      expect(Room.available_between(period)).to include(room)
+    end
+
+    it "excludes an out-of-service room" do
+      room = create(:room, :out_of_service)
+
+      expect(Room.available_between(period)).not_to include(room)
+    end
+
+    it "includes a cleaning room (still bookable)" do
+      room = create(:room, :cleaning)
+
+      expect(Room.available_between(period)).to include(room)
+    end
+
+    it "excludes a room with an overlapping reservation" do
+      room = create(:room)
+      create(:reservation, room: room, check_in_on: Date.new(2026, 6, 12), check_out_on: Date.new(2026, 6, 18))
+
+      expect(Room.available_between(period)).not_to include(room)
+    end
+  end
+
+  describe "#current_reservation" do
+    it "returns the checked-in reservation" do
+      room = create(:room)
+      stay = create(:reservation, :checked_in, room: room)
+      create(:reservation, :cancelled, room: room)
+
+      expect(room.current_reservation).to eq(stay)
+    end
+  end
 end

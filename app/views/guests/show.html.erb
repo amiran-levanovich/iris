@@ -1,0 +1,39 @@
+<div class="page-head">
+  <h1><%= @guest.name %></h1>
+  <%= link_to t(".edit"), edit_guest_path(@guest), class: "btn btn-quiet" %>
+</div>
+
+<p class="address">
+  <%= [ @guest.email, @guest.phone ].select(&:present?).join(" · ") %>
+</p>
+
+<h2><%= t(".stays") %></h2>
+
+<% if @reservations.any? %>
+  <table class="room-board">
+    <thead>
+      <tr>
+        <th><%= t(".property") %></th>
+        <th><%= Room.human_attribute_name(:number) %></th>
+        <th><%= Reservation.human_attribute_name(:check_in_on) %></th>
+        <th><%= Reservation.human_attribute_name(:check_out_on) %></th>
+        <th><%= Reservation.human_attribute_name(:status) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td><%= reservation.room.property.name %></td>
+          <td><span class="room-tag"><%= reservation.room.number %></span></td>
+          <td><%= l reservation.check_in_on %></td>
+          <td><%= l reservation.check_out_on %></td>
+          <td><%= reservation_status_tag(reservation) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty"><%= t(".empty_stays") %></p>
+<% end %>
+
+<%= link_to t(".back"), guests_path, class: "back-link" %>

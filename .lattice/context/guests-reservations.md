@@ -159,3 +159,16 @@ end
 ## Key Files
 
 <!-- Add as dev progresses. List paths with brief role note. -->
+
+Implemented 2026-06-13 (`/code-forge`):
+
+- `app/models/stay_period.rb` — `Data.define` VO; half-open `overlaps?`, `nights`, `valid?`.
+- `app/models/guest.rb` — aggregate root; `has_many :reservations` (desc check_in_on).
+- `app/models/reservation.rb` — AASM on `:status`; `overlapping`/`arriving_on`/`departing_on` scopes; `stay_period`, `total_cents`.
+- `app/models/room.rb` — added `has_many :reservations`, `available_between` scope, `current_reservation`.
+- `app/models/property.rb` — added `has_many :reservations, through: :rooms` for the house view.
+- `app/services/reservations/{room_unavailable_error,book_room,check_out}.rb` — booking + checkout transactions.
+- `app/controllers/{guests,reservations}_controller.rb` — CRUD + house view/booking/lifecycle; `rescue_from AASM::InvalidTransition`.
+- `app/views/guests/*`, `app/views/reservations/*`, room board occupancy column, `reservation_status_tag`/`room_option_label` helpers.
+- `db/migrate/20260613120000_create_guests.rb`, `db/migrate/20260613120001_create_reservations.rb`.
+- Specs: `spec/models/{stay_period,guest,reservation,room}_spec.rb`, `spec/services/reservations/*`, `spec/requests/{guests,reservations}_spec.rb`. Full suite green (82 examples).
