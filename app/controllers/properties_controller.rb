@@ -7,10 +7,13 @@ class PropertiesController < ApplicationController
 
   def show
     @property = Property.includes(:rooms).find(params.expect(:id))
-    @current_reservations = Reservation.checked_in
-                                       .where(room: @property.rooms)
-                                       .includes(:guest)
-                                       .index_by(&:room_id)
+
+    today = Date.current
+    @arrivals = @property.reservations.arriving_on(today).includes(:guest, :room)
+    @departures = @property.reservations.departing_on(today).includes(:guest, :room)
+    @in_house = @property.reservations.checked_in.includes(:guest, :room)
+    # Occupancy on the room board reads from the same in-house load.
+    @current_reservations = @in_house.index_by(&:room_id)
   end
 
   def new

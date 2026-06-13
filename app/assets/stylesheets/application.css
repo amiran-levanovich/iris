@@ -224,6 +224,86 @@ input[type="submit"]:hover {
   margin: 0 0 0.5rem;
 }
 
+/* ---- Movements band (today's arrivals / departures / in-house) ---- */
+
+.movements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.movements-col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.9rem 1rem 1rem;
+}
+
+.movements-arrivals { border-top-color: var(--iris); }
+.movements-departures { border-top-color: var(--signal); }
+.movements-in_house { border-top-color: var(--ok); }
+
+.movements-col h3 {
+  margin: 0 0 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.movements-col .count {
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 0.45rem;
+}
+
+.movements-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.movement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.movement:last-child { border-bottom: none; }
+
+.movement-guest { font-weight: 500; }
+
+.movement-action {
+  margin-left: auto;
+}
+
+.movement-action button {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.movements-col .empty {
+  margin: 0;
+  padding: 0.4rem 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 0.85rem;
+}
+
 /* ---- Room board ---- */
 
 .room-board {
@@ -257,6 +337,14 @@ input[type="submit"]:hover {
 .room-board tr:last-child td { border-bottom: none; }
 
 .room-board .num { font-family: var(--font-data); }
+
+/* State stripe down the left edge of each room row + tint for non-operational */
+.room-row td:first-child { border-left: 3px solid var(--ok); }
+.room-row-cleaning td:first-child { border-left-color: var(--signal); }
+.room-row-out_of_service td:first-child { border-left-color: var(--down); }
+
+.room-row-cleaning td { background: color-mix(in srgb, var(--signal-tint) 45%, transparent); }
+.room-row-out_of_service td { background: color-mix(in srgb, var(--down-tint) 45%, transparent); }
 
 /* Signature: room number as a key-fob chip with a punched hole */
 .room-tag {

@@ -1,4 +1,4 @@
-<tr>
+<tr class="room-row room-row-<%= room.status %>">
   <td><span class="room-tag"><%= room.number %></span></td>
   <td><%= human_enum(room, :room_type) %></td>
   <td><%= room.capacity %></td>

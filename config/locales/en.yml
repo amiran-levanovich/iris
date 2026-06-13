@@ -77,9 +77,16 @@ en:
     show:
       edit: Edit property
       back: Back to properties
+      today: Today
+      new_reservation: New reservation
+      arrivals: Arrivals
+      departures: Departures
+      in_house: In house
+      empty_arrivals: No arrivals today.
+      empty_departures: No departures today.
+      empty_in_house: No guests in house.
       rooms: Rooms
       new_room: New room
-      reservations: House view
       occupancy: Occupancy
       empty_rooms: No rooms yet. Add the first room to build this property's inventory.
     new:
@@ -133,22 +140,12 @@ en:
       notice: Guest updated.
 
   reservations:
-    index:
-      title: "House view — %{property}"
-      new_reservation: New reservation
-      arrivals: Arrivals today
-      departures: Departures today
-      in_house: In house
-      empty_arrivals: No arrivals scheduled for today.
-      empty_departures: No departures scheduled for today.
-      empty_in_house: No guests currently in house.
-      back: Back to property
     new:
       title: "New reservation — %{property}"
       check_availability: Check availability
       book: Book room
       no_rooms: No rooms available for these dates.
-      back: Back to house view
+      back: Back to property
     actions:
       check_in: Check in
       check_out: Check out
