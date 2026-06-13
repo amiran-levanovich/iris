@@ -1,5 +1,12 @@
 # Review Log
 
+## 2026-06-13 — Property Ops Overview (branch feature/property-ops-overview, a5af33b)
+- **Scope**: 14 files; controllers, views, routes, i18n, css, specs (presentation + read-query redesign)
+- **Atoms**: clean-code, architecture, secure-coding, test-quality
+- **Result**: 0 critical, 1 warning, 0 suggestion
+- **Key findings**: properties#show queried the same checked-in set twice (@current_reservations + @in_house) — collapsed by indexing @in_house
+- **Strengths**: fold-in deleted a whole action/route/2 templates; redirect retargeting consistent across 5 sites; no coverage lost
+
 ## 2026-06-13 — Guests & Reservations (branch feature/guests-reservations, 6a3630f)
 - **Scope**: 41 files; models, services, controllers, views, helpers, migrations, routes, specs
 - **Atoms**: clean-code, architecture, domain-driven-design, secure-coding, test-quality
