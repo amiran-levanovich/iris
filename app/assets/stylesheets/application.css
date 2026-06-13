@@ -297,6 +297,11 @@ input[type="submit"]:hover {
 .status-cleaning { color: #9a7314; background: var(--signal-tint); }
 .status-out_of_service { color: var(--down); background: var(--down-tint); }
 
+.status-booked { color: var(--iris); background: var(--iris-tint); }
+.status-checked_in { color: var(--ok); background: var(--ok-tint); }
+.status-checked_out { color: var(--ink-soft); background: var(--paper); }
+.status-cancelled { color: var(--down); background: var(--down-tint); }
+
 .room-actions {
   display: flex;
   gap: 0.4rem;

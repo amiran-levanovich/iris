@@ -11,7 +11,7 @@ RSpec.describe Reservations::CheckOut do
     expect(room.reload).to be_cleaning
   end
 
-  it "leaves both aggregates untouched when the transition is illegal" do
+  it "raises and leaves the room untouched when the reservation cannot check out" do
     room = create(:room, status: "operational")
     reservation = create(:reservation, room: room) # still booked, never checked in
 

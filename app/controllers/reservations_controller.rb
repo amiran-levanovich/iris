@@ -4,8 +4,8 @@ class ReservationsController < ApplicationController
 
   # An illegal lifecycle move (e.g. checking out a reservation that was never
   # checked in) is a user action against stale state, not a server fault.
-  rescue_from AASM::InvalidTransition do |error|
-    redirect_to property_reservations_path(error.object.room.property),
+  rescue_from AASM::InvalidTransition do
+    redirect_to property_reservations_path(@reservation.room.property),
                 alert: t("reservations.invalid_transition")
   end
 
@@ -23,9 +23,10 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    @stay_period = stay_period_from(reservation_params)
-    room = @property.rooms.find(reservation_params[:room_id])
-    guest = Guest.find(reservation_params[:guest_id])
+    booking = reservation_params
+    @stay_period = stay_period_from(booking)
+    room = @property.rooms.find(booking[:room_id])
+    guest = Guest.find(booking[:guest_id])
 
     Reservations::BookRoom.call(room:, guest:, stay_period: @stay_period)
     redirect_to property_reservations_path(@property), notice: t(".notice")

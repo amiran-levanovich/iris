@@ -17,9 +17,10 @@ module Reservations
     end
 
     def call
+      # Single writer (SQLite) makes this check-then-create race-safe locally;
+      # availability lives in one place — the Room.available_between scope.
       Reservation.transaction do
-        raise RoomUnavailableError if @room.out_of_service?
-        raise RoomUnavailableError if @room.reservations.overlapping(@stay_period).exists?
+        raise RoomUnavailableError unless Room.available_between(@stay_period).exists?(@room.id)
 
         Reservation.create!(
           room: @room,
