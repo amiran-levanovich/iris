@@ -16,7 +16,10 @@
 
 <div class="page-head">
   <h2><%= t(".rooms") %></h2>
-  <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
+  <div class="room-actions">
+    <%= link_to t(".reservations"), property_reservations_path(@property), class: "btn btn-quiet" %>
+    <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
+  </div>
 </div>
 
 <% if @property.rooms.any? %>
@@ -29,11 +32,12 @@
         <th><%= Room.human_attribute_name(:nightly_rate_cents) %></th>
         <th><%= Room.human_attribute_name(:floor) %></th>
         <th><%= Room.human_attribute_name(:status) %></th>
+        <th><%= t(".occupancy") %></th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <%= render partial: "rooms/room", collection: @property.rooms %>
+      <%= render partial: "rooms/room", collection: @property.rooms, locals: { current_reservations: @current_reservations } %>
     </tbody>
   </table>
 <% else %>

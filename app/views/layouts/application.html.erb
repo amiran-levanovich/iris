@@ -33,6 +33,7 @@
         <%= link_to t("layouts.application.brand"), root_path, class: "brand" %>
         <nav>
           <%= link_to t("layouts.application.properties"), properties_path %>
+          <%= link_to t("layouts.application.guests"), guests_path %>
         </nav>
         <%= button_to t("layouts.application.sign_out"), session_path, method: :delete, class: "btn btn-quiet" %>
       </header>

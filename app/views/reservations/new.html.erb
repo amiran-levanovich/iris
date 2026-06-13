@@ -1,0 +1,42 @@
+<h1><%= t(".title", property: @property.name) %></h1>
+
+<%= form_with url: new_property_reservation_path(@property), method: :get, class: "form form-inline" do |form| %>
+  <div>
+    <%= form.label :check_in_on, Reservation.human_attribute_name(:check_in_on) %>
+    <%= form.date_field :check_in_on, value: @stay_period.check_in %>
+  </div>
+  <div>
+    <%= form.label :check_out_on, Reservation.human_attribute_name(:check_out_on) %>
+    <%= form.date_field :check_out_on, value: @stay_period.check_out %>
+  </div>
+  <div>
+    <%= form.submit t(".check_availability") %>
+  </div>
+<% end %>
+
+<% if @rooms.any? %>
+  <%= form_with url: property_reservations_path(@property), scope: :reservation, class: "form" do |form| %>
+    <% if @reservation %><%= render "shared/form_errors", record: @reservation %><% end %>
+
+    <div>
+      <%= form.label :guest_id, Reservation.human_attribute_name(:guest) %>
+      <%= form.collection_select :guest_id, @guests, :id, :name, prompt: true %>
+    </div>
+
+    <div>
+      <%= form.label :room_id, Reservation.human_attribute_name(:room) %>
+      <%= form.select :room_id, @rooms.map { |room| [ room_option_label(room), room.id ] } %>
+    </div>
+
+    <%= form.hidden_field :check_in_on, value: @stay_period.check_in %>
+    <%= form.hidden_field :check_out_on, value: @stay_period.check_out %>
+
+    <div>
+      <%= form.submit t(".book") %>
+    </div>
+  <% end %>
+<% else %>
+  <p class="empty"><%= t(".no_rooms") %></p>
+<% end %>
+
+<%= link_to t(".back"), property_reservations_path(@property), class: "back-link" %>

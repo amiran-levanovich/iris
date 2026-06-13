@@ -1,0 +1,22 @@
+<%= form_with model: guest, class: "form" do |form| %>
+  <%= render "shared/form_errors", record: guest %>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :phone %>
+    <%= form.telephone_field :phone %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

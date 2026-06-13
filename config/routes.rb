@@ -2,10 +2,20 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
+  resources :guests, only: %i[ index show new create edit update ]
+
   resources :properties, only: %i[ index show new create edit update ] do
     resources :rooms, only: %i[ new create edit update ], shallow: true do
       member do
         patch :status
+      end
+    end
+
+    resources :reservations, only: %i[ index new create ], shallow: true do
+      member do
+        patch :check_in
+        patch :check_out
+        patch :cancel
       end
     end
   end

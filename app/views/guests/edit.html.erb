@@ -1,0 +1,5 @@
+<h1><%= t(".title", guest: @guest.name) %></h1>
+
+<%= render "form", guest: @guest %>
+
+<%= link_to t(".back"), guest_path(@guest), class: "back-link" %>
