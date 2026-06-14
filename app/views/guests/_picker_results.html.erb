@@ -2,7 +2,7 @@
   <ul class="guest-results">
     <% guests.each do |guest| %>
       <li>
-        <button type="button" class="guest-result" data-action="guest_search#pick"
+        <button type="button" class="guest-result" data-action="guest-search#pick"
                 data-guest-id="<%= guest.id %>" data-guest-name="<%= guest.name %>">
           <%= guest.name %>
           <% if guest.email.present? %><span class="muted"><%= guest.email %></span><% end %>

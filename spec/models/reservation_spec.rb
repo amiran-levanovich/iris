@@ -92,10 +92,6 @@ RSpec.describe Reservation, type: :model do
       expect(result).to contain_exactly(late)
     end
 
-    it "filters by guest" do
-      expect(Reservation.filtered(guest_id: early.guest_id)).to contain_exactly(early)
-    end
-
     it "filters by status" do
       expect(Reservation.filtered(status: "checked_in")).to contain_exactly(late)
     end
@@ -105,7 +101,7 @@ RSpec.describe Reservation, type: :model do
     end
 
     it "ignores blank filters" do
-      expect(Reservation.filtered(date_from: "", guest_id: nil, status: "")).to contain_exactly(early, late)
+      expect(Reservation.filtered(date_from: "", status: "")).to contain_exactly(early, late)
     end
   end
 

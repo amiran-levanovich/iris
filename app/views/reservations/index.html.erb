@@ -32,10 +32,6 @@
     <%= form.date_field :date_to, value: params[:date_to] %>
   </div>
   <div>
-    <%= form.label :guest_id, Reservation.human_attribute_name(:guest) %>
-    <%= form.select :guest_id, @guests.map { |g| [ g.name, g.id ] }, { include_blank: t(".all_guests"), selected: params[:guest_id] } %>
-  </div>
-  <div>
     <%= form.label :status, Reservation.human_attribute_name(:status) %>
     <%= form.select :status, Reservation.aasm.states.map { |s| [ human_enum(Reservation.new, :status, s.name), s.name ] }, { include_blank: t(".all_statuses"), selected: params[:status] } %>
   </div>

@@ -149,7 +149,6 @@ en:
       empty_in_house: No guests in house.
       date_from: From
       date_to: To
-      all_guests: All guests
       all_statuses: All statuses
       search_placeholder: Reservation #
       apply: Apply
@@ -167,6 +166,7 @@ en:
     create:
       notice: Reservation booked.
       unavailable: That room is no longer available for those dates.
+      incomplete: Select a guest and a room before booking.
     check_in:
       notice: Guest checked in.
     check_out:
