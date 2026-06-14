@@ -7,6 +7,14 @@
   <%= [ @guest.email, @guest.phone ].select(&:present?).join(" · ") %>
 </p>
 
+<% locality = [ @guest.street, @guest.city, @guest.postal_code ].select(&:present?) %>
+<% if locality.any? || @guest.country.present? %>
+  <p class="address">
+    <%= locality.join(", ") %><% if locality.any? && @guest.country.present? %>, <% end %>
+    <% if @guest.country.present? %><%= country_flag_tag(@guest.country) %> <%= country_name(@guest.country) %><% end %>
+  </p>
+<% end %>
+
 <h2><%= t(".stays") %></h2>
 
 <% if @reservations.any? %>

@@ -40,6 +40,10 @@ gem "image_processing", "~> 2.0"
 # State machines for domain lifecycles [https://github.com/aasm/aasm]
 gem "aasm", "~> 5.5"
 
+# ISO 3166 country data (names, alpha-2, dial codes) for the guest address +
+# phone pickers [https://github.com/countries/countries]
+gem "countries", "~> 7.0"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

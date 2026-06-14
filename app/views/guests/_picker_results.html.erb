@@ -11,11 +11,11 @@
     <% end %>
 
     <% if query.present? && guests.none? { |guest| guest.name.casecmp?(query) } %>
+      <% first_name, last_name = query.split(" ", 2) %>
       <li>
-        <%= form_with url: guests_path, class: "guest-create", data: { turbo_frame: "_top" } do %>
-          <%= hidden_field_tag "guest[name]", query %>
-          <%= submit_tag t("guests.picker.create", name: query) %>
-        <% end %>
+        <%= link_to t("guests.picker.create", name: query),
+              new_guest_path(guest: { first_name: first_name, last_name: last_name }),
+              class: "guest-create", data: { turbo_frame: "_top" } %>
       </li>
     <% end %>
   </ul>

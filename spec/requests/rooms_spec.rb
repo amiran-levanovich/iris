@@ -9,7 +9,7 @@ RSpec.describe "Rooms", type: :request do
   describe "GET /properties/:property_id/rooms" do
     it "renders the housekeeping dashboard with occupancy" do
       room = create(:room, property: property, number: "101")
-      guest = create(:guest, name: "Ada Lovelace")
+      guest = create(:guest, first_name: "Ada", last_name: "Lovelace")
       create(:reservation, :checked_in, room: room, guest: guest)
 
       get property_rooms_path(property)

@@ -10,12 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_13_120001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_145332) do
   create_table "guests", force: :cascade do |t|
+    t.string "city"
+    t.string "country"
     t.datetime "created_at", null: false
     t.string "email"
-    t.string "name", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.string "phone"
+    t.string "postal_code"
+    t.string "street"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_guests_on_email", unique: true, where: "email IS NOT NULL"
   end
