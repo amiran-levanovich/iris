@@ -422,29 +422,49 @@ input[type="submit"]:hover {
   color: var(--iris);
 }
 
+/* Autocomplete panel anchored to the search bar, floating over the form. */
+.guest-search-field { position: relative; }
+
+.guest-dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 30;
+}
+
 .guest-results {
   list-style: none;
-  margin: 0.3rem 0 0;
-  padding: 0;
+  margin: 0;
+  padding: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: 0 12px 28px rgba(20, 16, 60, 0.16);
+  max-height: 16rem;
+  overflow-y: auto;
 }
 
 .guest-results li { margin: 0; }
 
 .guest-result {
+  display: block;
   width: 100%;
   text-align: left;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: transparent;
+  border: 0;
   border-radius: calc(var(--radius) - 4px);
-  padding: 0.45rem 0.7rem;
-  margin-bottom: 0.25rem;
+  padding: 0.5rem 0.6rem;
+  color: var(--ink);
+  font: inherit;
   cursor: pointer;
 }
 
-.guest-result:hover { border-color: var(--iris); }
+.guest-result:hover,
+.guest-result:focus { background: var(--iris-tint); }
 .guest-result .muted { margin-left: 0.4rem; }
 
-.guest-create { margin-top: 0.3rem; }
+.guest-create { margin-top: 0.25rem; }
 
 /* Signature: room number as a key-fob chip with a punched hole */
 .room-tag {

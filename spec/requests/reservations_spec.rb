@@ -36,7 +36,6 @@ RSpec.describe "Reservations", type: :request do
 
       get property_reservations_path(property), params: { q: target.id }
 
-      # Assert on the row id cell — guest names also appear in the filter dropdown.
       expect(response.body).to include("##{target.id}")
       expect(response.body).not_to include("##{other.id}")
     end
@@ -95,6 +94,17 @@ RSpec.describe "Reservations", type: :request do
         }.not_to change(Reservation, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when no guest is selected" do
+      it "re-renders the form with an alert instead of raising" do
+        expect {
+          post property_reservations_path(property), params: booking_params(guest_id: "")
+        }.not_to change(Reservation, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(flash[:alert]).to be_present
       end
     end
   end

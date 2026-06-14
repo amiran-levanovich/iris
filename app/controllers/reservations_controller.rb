@@ -17,10 +17,9 @@ class ReservationsController < ApplicationController
 
     @reservations = @property.reservations
                              .filtered(date_from: params[:date_from], date_to: params[:date_to],
-                                       guest_id: params[:guest_id], status: params[:status], id: params[:q])
+                                       status: params[:status], id: params[:q])
                              .includes(:guest, :room)
                              .order(check_in_on: :desc)
-    @guests = Guest.order(:name)
   end
 
   def new
@@ -31,8 +30,14 @@ class ReservationsController < ApplicationController
   def create
     booking = reservation_params
     @stay_period = stay_period_from(booking)
-    room = @property.rooms.find(booking[:room_id])
-    guest = Guest.find(booking[:guest_id])
+    room = @property.rooms.find_by(id: booking[:room_id])
+    guest = Guest.find_by(id: booking[:guest_id])
+
+    if guest.nil? || room.nil?
+      setup_booking_form
+      flash.now[:alert] = t(".incomplete")
+      return render :new, status: :unprocessable_entity
+    end
 
     Reservations::BookRoom.call(room:, guest:, stay_period: @stay_period)
     redirect_to property_reservations_path(@property), notice: t(".notice")
@@ -77,7 +82,6 @@ class ReservationsController < ApplicationController
 
   def setup_booking_form
     @rooms = @property.rooms.available_between(@stay_period)
-    @guests = Guest.order(:name)
   end
 
   # Builds the requested stay from a params-like hash, defaulting to a one-night

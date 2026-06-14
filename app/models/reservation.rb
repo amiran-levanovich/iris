@@ -46,15 +46,13 @@ class Reservation < ApplicationRecord
     rel = rel.where("check_in_on <= ?", to) if to.present?
     rel
   }
-  scope :for_guest, ->(guest_id) { where(guest_id: guest_id) }
   scope :with_status, ->(status) { where(status: status) }
 
   # Composes the console list filters, skipping any that are blank.
-  def self.filtered(date_from: nil, date_to: nil, guest_id: nil, status: nil, id: nil)
+  def self.filtered(date_from: nil, date_to: nil, status: nil, id: nil)
     scope = all
     scope = scope.where(id: id) if id.present?
     scope = scope.between_dates(date_from, date_to) if date_from.present? || date_to.present?
-    scope = scope.for_guest(guest_id) if guest_id.present?
     scope = scope.with_status(status) if status.present?
     scope
   end
