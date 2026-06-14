@@ -1,0 +1,4 @@
+<div id="guest_selection" class="guest-selection">
+  <%= hidden_field_tag "reservation[guest_id]", guest&.id, data: { guest_search_target: "hidden" } %>
+  <span class="guest-chosen<%= " muted" if guest.nil? %>" data-guest-search-target="display"><%= guest&.name %></span>
+</div>

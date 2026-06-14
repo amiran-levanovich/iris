@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "guest_results" do %>
+  <ul class="guest-results">
+    <% guests.each do |guest| %>
+      <li>
+        <button type="button" class="guest-result" data-action="guest_search#pick"
+                data-guest-id="<%= guest.id %>" data-guest-name="<%= guest.name %>">
+          <%= guest.name %>
+          <% if guest.email.present? %><span class="muted"><%= guest.email %></span><% end %>
+        </button>
+      </li>
+    <% end %>
+
+    <% if query.present? && guests.none? { |guest| guest.name.casecmp?(query) } %>
+      <li>
+        <%= form_with url: guests_path, class: "guest-create", data: { turbo_frame: "_top" } do %>
+          <%= hidden_field_tag "guest[name]", query %>
+          <%= submit_tag t("guests.picker.create", name: query) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

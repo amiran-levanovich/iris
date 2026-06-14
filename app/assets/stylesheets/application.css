@@ -346,6 +346,106 @@ input[type="submit"]:hover {
 .room-row-cleaning td { background: color-mix(in srgb, var(--signal-tint) 45%, transparent); }
 .room-row-out_of_service td { background: color-mix(in srgb, var(--down-tint) 45%, transparent); }
 
+.muted { color: var(--ink-soft); }
+
+/* ---- Property tabs ---- */
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--line);
+  margin: 0.5rem 0 1.25rem;
+}
+
+.tabs .tab {
+  padding: 0.55rem 1rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tabs .tab:hover { text-decoration: none; color: var(--ink); }
+
+.tabs .tab.active {
+  color: var(--iris);
+  border-bottom-color: var(--iris);
+}
+
+/* ---- Reservation filters ---- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.6rem 0.8rem;
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.filters label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 0.2rem;
+}
+
+.filters .filter-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ---- Booking form: dates + guest picker ---- */
+
+.field-row {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.field-row > div { flex: 1; }
+
+.guest-picker { position: relative; }
+
+.guest-selection {
+  margin-top: 0.4rem;
+  min-height: 1.4rem;
+}
+
+.guest-chosen {
+  font-weight: 600;
+  color: var(--iris);
+}
+
+.guest-results {
+  list-style: none;
+  margin: 0.3rem 0 0;
+  padding: 0;
+}
+
+.guest-results li { margin: 0; }
+
+.guest-result {
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 4px);
+  padding: 0.45rem 0.7rem;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+}
+
+.guest-result:hover { border-color: var(--iris); }
+.guest-result .muted { margin-left: 0.4rem; }
+
+.guest-create { margin-top: 0.3rem; }
+
 /* Signature: room number as a key-fob chip with a punched hole */
 .room-tag {
   display: inline-block;

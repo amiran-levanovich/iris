@@ -74,21 +74,11 @@ en:
       title: Properties
       new_property: New property
       empty: No properties yet. Create the first one to start managing rooms.
+    tabs:
+      reservations: Reservations
+      housekeeping: Housekeeping
     show:
       edit: Edit property
-      back: Back to properties
-      today: Today
-      new_reservation: New reservation
-      arrivals: Arrivals
-      departures: Departures
-      in_house: In house
-      empty_arrivals: No arrivals today.
-      empty_departures: No departures today.
-      empty_in_house: No guests in house.
-      rooms: Rooms
-      new_room: New room
-      occupancy: Occupancy
-      empty_rooms: No rooms yet. Add the first room to build this property's inventory.
     new:
       title: New property
       back: Back to properties
@@ -101,6 +91,11 @@ en:
       notice: Property updated.
 
   rooms:
+    index:
+      rooms: Rooms
+      new_room: New room
+      occupancy: Occupancy
+      empty_rooms: No rooms yet. Add the first room to build this property's inventory.
     room:
       edit: Edit
     new:
@@ -118,6 +113,9 @@ en:
       alert: Unknown room status.
 
   guests:
+    picker:
+      search_placeholder: Search by name…
+      create: Create “%{name}”
     index:
       title: Guests
       new_guest: New guest
@@ -140,9 +138,25 @@ en:
       notice: Guest updated.
 
   reservations:
+    index:
+      today: Today
+      new_reservation: New reservation
+      arrivals: Arrivals
+      departures: Departures
+      in_house: In house
+      empty_arrivals: No arrivals today.
+      empty_departures: No departures today.
+      empty_in_house: No guests in house.
+      date_from: From
+      date_to: To
+      all_guests: All guests
+      all_statuses: All statuses
+      search_placeholder: Reservation #
+      apply: Apply
+      reset: Reset
+      empty: No reservations match these filters.
     new:
       title: "New reservation — %{property}"
-      check_availability: Check availability
       book: Book room
       no_rooms: No rooms available for these dates.
       back: Back to property

@@ -19,6 +19,39 @@ RSpec.describe "Reservations", type: :request do
     }
   end
 
+  describe "GET /properties/:property_id/reservations" do
+    it "renders the movements strip and the reservation list" do
+      arriving = create(:reservation, room: room, guest: guest, check_in_on: Date.current, check_out_on: Date.current.next_day(2))
+
+      get property_reservations_path(property)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Arrivals").and include(guest.name)
+      expect(response.body).to include("##{arriving.id}")
+    end
+
+    it "narrows the list by reservation id" do
+      target = create(:reservation, room: room, guest: guest)
+      other = create(:reservation, room: room, guest: create(:guest))
+
+      get property_reservations_path(property), params: { q: target.id }
+
+      # Assert on the row id cell — guest names also appear in the filter dropdown.
+      expect(response.body).to include("##{target.id}")
+      expect(response.body).not_to include("##{other.id}")
+    end
+
+    it "filters by status" do
+      checked = create(:reservation, :checked_in, room: room, guest: guest)
+      cancelled = create(:reservation, :cancelled, room: room, guest: create(:guest))
+
+      get property_reservations_path(property), params: { status: "checked_in" }
+
+      expect(response.body).to include("##{checked.id}")
+      expect(response.body).not_to include("##{cancelled.id}")
+    end
+  end
+
   describe "GET /properties/:property_id/reservations/new" do
     it "renders the booking form with available rooms" do
       room
@@ -37,7 +70,7 @@ RSpec.describe "Reservations", type: :request do
           post property_reservations_path(property), params: booking_params
         }.to change(Reservation, :count).by(1)
 
-        expect(response).to redirect_to(property_path(property))
+        expect(response).to redirect_to(property_reservations_path(property))
         expect(Reservation.last.nightly_rate_cents).to eq(room.nightly_rate_cents)
       end
     end
@@ -73,7 +106,7 @@ RSpec.describe "Reservations", type: :request do
       patch check_in_reservation_path(reservation)
 
       expect(reservation.reload).to be_checked_in
-      expect(response).to redirect_to(property_path(property))
+      expect(response).to redirect_to(property_reservations_path(property))
     end
   end
 
@@ -85,7 +118,7 @@ RSpec.describe "Reservations", type: :request do
 
       expect(reservation.reload).to be_checked_out
       expect(room.reload).to be_cleaning
-      expect(response).to redirect_to(property_path(property))
+      expect(response).to redirect_to(property_reservations_path(property))
     end
 
     context "when the reservation was never checked in" do
@@ -95,7 +128,7 @@ RSpec.describe "Reservations", type: :request do
         patch check_out_reservation_path(reservation)
 
         expect(reservation.reload).to be_booked
-        expect(response).to redirect_to(property_path(property))
+        expect(response).to redirect_to(property_reservations_path(property))
         expect(flash[:alert]).to be_present
       end
     end
@@ -108,7 +141,7 @@ RSpec.describe "Reservations", type: :request do
       patch cancel_reservation_path(reservation)
 
       expect(reservation.reload).to be_cancelled
-      expect(response).to redirect_to(property_path(property))
+      expect(response).to redirect_to(property_reservations_path(property))
     end
   end
 end

@@ -1,0 +1,10 @@
+<% if @guest.persisted? %>
+  <%= turbo_stream.replace "guest_selection" do %>
+    <%= render "guests/selection", guest: @guest %>
+  <% end %>
+  <%= turbo_stream.update "guest_results", "" %>
+<% else %>
+  <%= turbo_stream.update "guest_results" do %>
+    <p class="empty"><%= @guest.errors.full_messages.to_sentence %></p>
+  <% end %>
+<% end %>

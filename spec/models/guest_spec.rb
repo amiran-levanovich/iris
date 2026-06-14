@@ -28,6 +28,16 @@ RSpec.describe Guest, type: :model do
     end
   end
 
+  describe ".search" do
+    it "matches a partial name case-insensitively" do
+      ada = create(:guest, name: "Ada Lovelace")
+      create(:guest, name: "Grace Hopper")
+
+      expect(Guest.search("lovel")).to contain_exactly(ada)
+      expect(Guest.search("ADA")).to contain_exactly(ada)
+    end
+  end
+
   describe "#reservations" do
     it "lists stays newest check-in first" do
       guest = create(:guest)
