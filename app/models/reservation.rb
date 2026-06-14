@@ -6,7 +6,13 @@ class Reservation < ApplicationRecord
 
   validates :check_in_on, :check_out_on, presence: true
   validates :nightly_rate_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :internal_id, presence: true, uniqueness: true
   validate :check_out_after_check_in
+
+  # Human-friendly reservation code, assigned on creation through every path
+  # (BookRoom, factories). before_validation (not before_create) so the presence
+  # + uniqueness validations see the generated value. Own-data only.
+  before_validation :assign_internal_id, on: :create
 
   # AASM owns the status column directly — no Rails enum, to avoid two state
   # machines fighting over the same column. State scopes (booked, checked_in,
@@ -47,11 +53,13 @@ class Reservation < ApplicationRecord
     rel
   }
   scope :with_status, ->(status) { where(status: status) }
+  # Case-insensitive partial match on the reservation code.
+  scope :with_code, ->(query) { where("internal_id LIKE ?", "%#{query.upcase}%") }
 
   # Composes the console list filters, skipping any that are blank.
-  def self.filtered(date_from: nil, date_to: nil, status: nil, id: nil)
+  def self.filtered(date_from: nil, date_to: nil, status: nil, code: nil)
     scope = all
-    scope = scope.where(id: id) if id.present?
+    scope = scope.with_code(code) if code.present?
     scope = scope.between_dates(date_from, date_to) if date_from.present? || date_to.present?
     scope = scope.with_status(status) if status.present?
     scope
@@ -66,6 +74,15 @@ class Reservation < ApplicationRecord
   end
 
   private
+
+  def assign_internal_id
+    return if internal_id.present?
+
+    self.internal_id = loop do
+      code = ReservationCode.generate
+      break code unless self.class.exists?(internal_id: code)
+    end
+  end
 
   def check_out_after_check_in
     return if check_in_on.blank? || check_out_on.blank?

@@ -27,27 +27,27 @@ RSpec.describe "Reservations", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Arrivals").and include(guest.name)
-      expect(response.body).to include("##{arriving.id}")
+      expect(response.body).to include(arriving.internal_id)
     end
 
-    it "narrows the list by reservation id" do
-      target = create(:reservation, room: room, guest: guest)
-      other = create(:reservation, room: room, guest: create(:guest))
+    it "narrows the list by reservation code, case-insensitively" do
+      target = create(:reservation, room: room, guest: guest, internal_id: "AAAAAA")
+      other = create(:reservation, room: room, guest: create(:guest), internal_id: "ZZZZZZ")
 
-      get property_reservations_path(property), params: { q: target.id }
+      get property_reservations_path(property), params: { q: "aaaaaa" }
 
-      expect(response.body).to include("##{target.id}")
-      expect(response.body).not_to include("##{other.id}")
+      expect(response.body).to include(target.internal_id)
+      expect(response.body).not_to include(other.internal_id)
     end
 
     it "filters by status" do
-      checked = create(:reservation, :checked_in, room: room, guest: guest)
-      cancelled = create(:reservation, :cancelled, room: room, guest: create(:guest))
+      checked = create(:reservation, :checked_in, room: room, guest: guest, internal_id: "CHKDIN")
+      cancelled = create(:reservation, :cancelled, room: room, guest: create(:guest), internal_id: "CANCEL")
 
       get property_reservations_path(property), params: { status: "checked_in" }
 
-      expect(response.body).to include("##{checked.id}")
-      expect(response.body).not_to include("##{cancelled.id}")
+      expect(response.body).to include(checked.internal_id)
+      expect(response.body).not_to include(cancelled.internal_id)
     end
   end
 

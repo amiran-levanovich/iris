@@ -17,7 +17,7 @@ class ReservationsController < ApplicationController
 
     @reservations = @property.reservations
                              .filtered(date_from: params[:date_from], date_to: params[:date_to],
-                                       status: params[:status], id: params[:q])
+                                       status: params[:status], code: params[:q])
                              .includes(:guest, :room)
                              .order(check_in_on: :desc)
   end
