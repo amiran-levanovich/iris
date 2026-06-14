@@ -1,0 +1,28 @@
+<%= render "properties/tabs", property: @property %>
+
+<div class="page-head">
+  <h2><%= t(".rooms") %></h2>
+  <%= link_to t(".new_room"), new_property_room_path(@property), class: "btn" %>
+</div>
+
+<% if @property.rooms.any? %>
+  <table class="room-board">
+    <thead>
+      <tr>
+        <th><%= Room.human_attribute_name(:number) %></th>
+        <th><%= Room.human_attribute_name(:room_type) %></th>
+        <th><%= Room.human_attribute_name(:capacity) %></th>
+        <th><%= Room.human_attribute_name(:nightly_rate_cents) %></th>
+        <th><%= Room.human_attribute_name(:floor) %></th>
+        <th><%= Room.human_attribute_name(:status) %></th>
+        <th><%= t(".occupancy") %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "rooms/room", collection: @property.rooms, locals: { current_reservations: @current_reservations } %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty"><%= t(".empty_rooms") %></p>
+<% end %>

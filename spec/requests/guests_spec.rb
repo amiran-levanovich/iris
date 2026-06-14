@@ -16,6 +16,30 @@ RSpec.describe "Guests", type: :request do
     end
   end
 
+  describe "GET /guests?q= (booking picker search)" do
+    it "returns only the picker results for a Turbo Frame request" do
+      create(:guest, name: "Ada Lovelace")
+      create(:guest, name: "Grace Hopper")
+
+      get guests_path, params: { q: "ada" }, headers: { "Turbo-Frame" => "guest_results" }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Ada Lovelace").and include("guest-result")
+      expect(response.body).not_to include("Grace Hopper")
+    end
+  end
+
+  describe "POST /guests as turbo_stream (inline create)" do
+    it "creates the guest and returns a stream selecting it" do
+      expect {
+        post guests_path, params: { guest: { name: "Inline Guest" } }, as: :turbo_stream
+      }.to change(Guest, :count).by(1)
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("guest_selection").and include("Inline Guest")
+    end
+  end
+
   describe "POST /guests" do
     context "with valid params" do
       it "creates the guest and redirects to it" do

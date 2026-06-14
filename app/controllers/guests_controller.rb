@@ -2,7 +2,14 @@ class GuestsController < ApplicationController
   before_action :set_guest, only: %i[ show edit update ]
 
   def index
-    @guests = Guest.order(:name)
+    @guests = params[:q].present? ? Guest.search(params[:q]).order(:name) : Guest.order(:name)
+
+    # The booking guest picker searches into a Turbo Frame; reply with just the
+    # results list, not the whole page.
+    if turbo_frame_request_id == "guest_results"
+      render partial: "guests/picker_results",
+             locals: { guests: @guests, query: params[:q].to_s }, layout: false
+    end
   end
 
   def show
@@ -15,11 +22,18 @@ class GuestsController < ApplicationController
 
   def create
     @guest = Guest.new(guest_params)
+    saved = @guest.save
 
-    if @guest.save
-      redirect_to @guest, notice: t(".notice")
-    else
-      render :new, status: :unprocessable_entity
+    respond_to do |format|
+      # Inline create from the booking picker: select the new guest in place.
+      format.turbo_stream { render :create, status: saved ? :ok : :unprocessable_entity }
+      format.html do
+        if saved
+          redirect_to @guest, notice: t(".notice")
+        else
+          render :new, status: :unprocessable_entity
+        end
+      end
     end
   end
 

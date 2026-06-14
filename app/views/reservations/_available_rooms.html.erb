@@ -1,0 +1,6 @@
+<% if rooms.any? %>
+  <%= select_tag "reservation[room_id]",
+        options_for_select(rooms.map { |room| [ room_option_label(room), room.id ] }) %>
+<% else %>
+  <p class="empty"><%= t("reservations.new.no_rooms") %></p>
+<% end %>

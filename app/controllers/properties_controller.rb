@@ -5,15 +5,9 @@ class PropertiesController < ApplicationController
     @properties = Property.order(:name)
   end
 
+  # The property page is a set of tabs; Reservations is the default.
   def show
-    @property = Property.includes(:rooms).find(params.expect(:id))
-
-    today = Date.current
-    @arrivals = @property.reservations.arriving_on(today).includes(:guest, :room)
-    @departures = @property.reservations.departing_on(today).includes(:guest, :room)
-    @in_house = @property.reservations.checked_in.includes(:guest, :room)
-    # Occupancy on the room board reads from the same in-house load.
-    @current_reservations = @in_house.index_by(&:room_id)
+    redirect_to property_reservations_path(params.expect(:id))
   end
 
   def new

@@ -6,6 +6,19 @@ RSpec.describe "Rooms", type: :request do
 
   before { sign_in(user) }
 
+  describe "GET /properties/:property_id/rooms" do
+    it "renders the housekeeping dashboard with occupancy" do
+      room = create(:room, property: property, number: "101")
+      guest = create(:guest, name: "Ada Lovelace")
+      create(:reservation, :checked_in, room: room, guest: guest)
+
+      get property_rooms_path(property)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("101").and include("Ada Lovelace")
+    end
+  end
+
   describe "POST /properties/:property_id/rooms" do
     context "with valid params" do
       it "creates the room through its property and redirects" do
@@ -14,7 +27,7 @@ RSpec.describe "Rooms", type: :request do
                params: { room: { number: "101", room_type: "double", capacity: 2, nightly_rate_cents: 9_000 } }
         }.to change(property.rooms, :count).by(1)
 
-        expect(response).to redirect_to(property_path(property))
+        expect(response).to redirect_to(property_rooms_path(property))
       end
     end
 
@@ -51,7 +64,7 @@ RSpec.describe "Rooms", type: :request do
         patch room_path(room), params: { room: { capacity: 4 } }
 
         expect(room.reload.capacity).to eq(4)
-        expect(response).to redirect_to(property_path(property))
+        expect(response).to redirect_to(property_rooms_path(property))
       end
     end
 
@@ -71,14 +84,14 @@ RSpec.describe "Rooms", type: :request do
       patch status_room_path(room), params: { status: "cleaning" }
 
       expect(room.reload).to be_cleaning
-      expect(response).to redirect_to(property_path(property))
+      expect(response).to redirect_to(property_rooms_path(property))
     end
 
     it "rejects an unknown status without changing the room" do
       patch status_room_path(room), params: { status: "on_fire" }
 
       expect(room.reload).to be_operational
-      expect(response).to redirect_to(property_path(property))
+      expect(response).to redirect_to(property_rooms_path(property))
       expect(flash[:alert]).to be_present
     end
   end

@@ -77,6 +77,38 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
+  describe ".filtered" do
+    let(:room) { create(:room) }
+    let!(:early) { create(:reservation, room: room, check_in_on: Date.new(2026, 6, 1), check_out_on: Date.new(2026, 6, 4)) }
+    let!(:late) { create(:reservation, :checked_in, room: room, check_in_on: Date.new(2026, 7, 1), check_out_on: Date.new(2026, 7, 5)) }
+
+    it "returns everything when no filters are given" do
+      expect(Reservation.filtered).to contain_exactly(early, late)
+    end
+
+    it "filters by a date window (intersecting stays)" do
+      result = Reservation.filtered(date_from: Date.new(2026, 6, 20), date_to: Date.new(2026, 7, 2))
+
+      expect(result).to contain_exactly(late)
+    end
+
+    it "filters by guest" do
+      expect(Reservation.filtered(guest_id: early.guest_id)).to contain_exactly(early)
+    end
+
+    it "filters by status" do
+      expect(Reservation.filtered(status: "checked_in")).to contain_exactly(late)
+    end
+
+    it "filters by id" do
+      expect(Reservation.filtered(id: late.id)).to contain_exactly(late)
+    end
+
+    it "ignores blank filters" do
+      expect(Reservation.filtered(date_from: "", guest_id: nil, status: "")).to contain_exactly(early, late)
+    end
+  end
+
   describe "#total_cents" do
     it "multiplies the nightly rate by the number of nights" do
       reservation = build(:reservation, nightly_rate_cents: 10_000,

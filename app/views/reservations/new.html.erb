@@ -1,42 +1,34 @@
 <h1><%= t(".title", property: @property.name) %></h1>
 
-<%= form_with url: new_property_reservation_path(@property), method: :get, class: "form form-inline" do |form| %>
-  <div>
-    <%= form.label :check_in_on, Reservation.human_attribute_name(:check_in_on) %>
-    <%= form.date_field :check_in_on, value: @stay_period.check_in %>
-  </div>
-  <div>
-    <%= form.label :check_out_on, Reservation.human_attribute_name(:check_out_on) %>
-    <%= form.date_field :check_out_on, value: @stay_period.check_out %>
-  </div>
-  <div>
-    <%= form.submit t(".check_availability") %>
-  </div>
-<% end %>
+<%= form_with url: property_reservations_path(@property), scope: :reservation, class: "form",
+      data: { controller: "availability", availability_url_value: new_property_reservation_path(@property) } do |form| %>
+  <% if @reservation %><%= render "shared/form_errors", record: @reservation %><% end %>
 
-<% if @rooms.any? %>
-  <%= form_with url: property_reservations_path(@property), scope: :reservation, class: "form" do |form| %>
-    <% if @reservation %><%= render "shared/form_errors", record: @reservation %><% end %>
-
+  <div class="field-row">
     <div>
-      <%= form.label :guest_id, Reservation.human_attribute_name(:guest) %>
-      <%= form.collection_select :guest_id, @guests, :id, :name, prompt: true %>
+      <%= form.label :check_in_on, Reservation.human_attribute_name(:check_in_on) %>
+      <%= form.date_field :check_in_on, value: @stay_period.check_in,
+            data: { availability_target: "date", action: "availability#refresh" } %>
     </div>
-
     <div>
-      <%= form.label :room_id, Reservation.human_attribute_name(:room) %>
-      <%= form.select :room_id, @rooms.map { |room| [ room_option_label(room), room.id ] } %>
+      <%= form.label :check_out_on, Reservation.human_attribute_name(:check_out_on) %>
+      <%= form.date_field :check_out_on, value: @stay_period.check_out,
+            data: { availability_target: "date", action: "availability#refresh" } %>
     </div>
+  </div>
 
-    <%= form.hidden_field :check_in_on, value: @stay_period.check_in %>
-    <%= form.hidden_field :check_out_on, value: @stay_period.check_out %>
+  <%= render "guests/picker" %>
 
-    <div>
-      <%= form.submit t(".book") %>
-    </div>
-  <% end %>
-<% else %>
-  <p class="empty"><%= t(".no_rooms") %></p>
+  <div>
+    <%= form.label :room_id, Reservation.human_attribute_name(:room) %>
+    <%= turbo_frame_tag "available_rooms" do %>
+      <%= render "reservations/available_rooms", rooms: @rooms %>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.submit t(".book") %>
+  </div>
 <% end %>
 
 <%= link_to t(".back"), property_path(@property), class: "back-link" %>

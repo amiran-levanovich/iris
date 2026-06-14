@@ -1,0 +1,9 @@
+<div class="guest-picker" data-controller="guest_search" data-guest-search-url-value="<%= guests_path %>">
+  <%= label_tag :guest_query, Reservation.human_attribute_name(:guest) %>
+  <%= text_field_tag :guest_query, nil, placeholder: t("guests.picker.search_placeholder"),
+        autocomplete: "off",
+        data: { guest_search_target: "input", action: "input->guest_search#search" } %>
+
+  <%= render "guests/selection", guest: nil %>
+  <%= turbo_frame_tag "guest_results", data: { guest_search_target: "results" } %>
+</div>

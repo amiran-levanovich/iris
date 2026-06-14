@@ -1,6 +1,14 @@
 class RoomsController < ApplicationController
-  before_action :set_property, only: %i[ new create ]
+  before_action :set_property, only: %i[ index new create ]
   before_action :set_room, only: %i[ edit update status ]
+
+  # Housekeeping tab: the room dashboard with occupancy.
+  def index
+    @current_reservations = Reservation.checked_in
+                                       .where(room: @property.rooms)
+                                       .includes(:guest)
+                                       .index_by(&:room_id)
+  end
 
   def new
     @room = @property.rooms.build
@@ -10,7 +18,7 @@ class RoomsController < ApplicationController
     @room = @property.rooms.build
 
     if assign_room_attributes(@room) && @room.save
-      redirect_to @property, notice: t(".notice")
+      redirect_to property_rooms_path(@property), notice: t(".notice")
     else
       render :new, status: :unprocessable_entity
     end
@@ -21,7 +29,7 @@ class RoomsController < ApplicationController
 
   def update
     if assign_room_attributes(@room) && @room.save
-      redirect_to @room.property, notice: t(".notice")
+      redirect_to property_rooms_path(@room.property), notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -29,9 +37,9 @@ class RoomsController < ApplicationController
 
   def status
     @room.change_status!(params.expect(:status))
-    redirect_to @room.property, notice: t(".notice")
+    redirect_to property_rooms_path(@room.property), notice: t(".notice")
   rescue ArgumentError
-    redirect_to @room.property, alert: t(".alert")
+    redirect_to property_rooms_path(@room.property), alert: t(".alert")
   end
 
   private

@@ -1,0 +1,71 @@
+<%= render "properties/tabs", property: @property %>
+
+<div class="page-head">
+  <h2><%= t(".today") %></h2>
+  <%= link_to t(".new_reservation"), new_property_reservation_path(@property), class: "btn" %>
+</div>
+
+<% movement_groups = { arrivals: @arrivals, departures: @departures, in_house: @in_house } %>
+
+<div class="movements">
+  <% movement_groups.each do |name, movements| %>
+    <section class="movements-col movements-<%= name %>">
+      <h3><%= t(".#{name}") %> <span class="count"><%= movements.size %></span></h3>
+      <% if movements.any? %>
+        <ul>
+          <%= render partial: "properties/movement", collection: movements, as: :movement %>
+        </ul>
+      <% else %>
+        <p class="empty"><%= t(".empty_#{name}") %></p>
+      <% end %>
+    </section>
+  <% end %>
+</div>
+
+<%= form_with url: property_reservations_path(@property), method: :get, class: "filters" do |form| %>
+  <div>
+    <%= form.label :date_from, t(".date_from") %>
+    <%= form.date_field :date_from, value: params[:date_from] %>
+  </div>
+  <div>
+    <%= form.label :date_to, t(".date_to") %>
+    <%= form.date_field :date_to, value: params[:date_to] %>
+  </div>
+  <div>
+    <%= form.label :guest_id, Reservation.human_attribute_name(:guest) %>
+    <%= form.select :guest_id, @guests.map { |g| [ g.name, g.id ] }, { include_blank: t(".all_guests"), selected: params[:guest_id] } %>
+  </div>
+  <div>
+    <%= form.label :status, Reservation.human_attribute_name(:status) %>
+    <%= form.select :status, Reservation.aasm.states.map { |s| [ human_enum(Reservation.new, :status, s.name), s.name ] }, { include_blank: t(".all_statuses"), selected: params[:status] } %>
+  </div>
+  <div>
+    <%= form.label :q, t(".search_placeholder") %>
+    <%= form.text_field :q, value: params[:q], placeholder: t(".search_placeholder") %>
+  </div>
+  <div class="filter-actions">
+    <%= form.submit t(".apply") %>
+    <%= link_to t(".reset"), property_reservations_path(@property), class: "btn btn-quiet" %>
+  </div>
+<% end %>
+
+<% if @reservations.any? %>
+  <table class="room-board">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th><%= Reservation.human_attribute_name(:guest) %></th>
+        <th><%= Room.human_attribute_name(:number) %></th>
+        <th><%= Reservation.human_attribute_name(:check_in_on) %></th>
+        <th><%= Reservation.human_attribute_name(:check_out_on) %></th>
+        <th><%= Reservation.human_attribute_name(:status) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "reservations/reservation_row", collection: @reservations, as: :reservation %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty"><%= t(".empty") %></p>
+<% end %>

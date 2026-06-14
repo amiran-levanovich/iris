@@ -39,6 +39,26 @@ class Reservation < ApplicationRecord
   scope :arriving_on, ->(date) { booked.where(check_in_on: date) }
   scope :departing_on, ->(date) { checked_in.where(check_out_on: date) }
 
+  # List filters. Each is nil-safe so the console can apply them independently.
+  scope :between_dates, ->(from, to) {
+    rel = all
+    rel = rel.where("check_out_on >= ?", from) if from.present?
+    rel = rel.where("check_in_on <= ?", to) if to.present?
+    rel
+  }
+  scope :for_guest, ->(guest_id) { where(guest_id: guest_id) }
+  scope :with_status, ->(status) { where(status: status) }
+
+  # Composes the console list filters, skipping any that are blank.
+  def self.filtered(date_from: nil, date_to: nil, guest_id: nil, status: nil, id: nil)
+    scope = all
+    scope = scope.where(id: id) if id.present?
+    scope = scope.between_dates(date_from, date_to) if date_from.present? || date_to.present?
+    scope = scope.for_guest(guest_id) if guest_id.present?
+    scope = scope.with_status(status) if status.present?
+    scope
+  end
+
   def stay_period
     StayPeriod.new(check_in: check_in_on, check_out: check_out_on)
   end

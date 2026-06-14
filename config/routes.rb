@@ -5,13 +5,13 @@ Rails.application.routes.draw do
   resources :guests, only: %i[ index show new create edit update ]
 
   resources :properties, only: %i[ index show new create edit update ] do
-    resources :rooms, only: %i[ new create edit update ], shallow: true do
+    resources :rooms, only: %i[ index new create edit update ], shallow: true do
       member do
         patch :status
       end
     end
 
-    resources :reservations, only: %i[ new create ], shallow: true do
+    resources :reservations, only: %i[ index new create ], shallow: true do
       member do
         patch :check_in
         patch :check_out

@@ -1,0 +1,21 @@
+<tr>
+  <td class="num">#<%= reservation.id %></td>
+  <td><%= link_to reservation.guest.name, guest_path(reservation.guest) %></td>
+  <td><span class="room-tag"><%= reservation.room.number %></span></td>
+  <td><%= l reservation.check_in_on %></td>
+  <td><%= l reservation.check_out_on %></td>
+  <td><%= reservation_status_tag(reservation) %></td>
+  <td>
+    <div class="room-actions">
+      <% if reservation.may_check_in? %>
+        <%= button_to t("reservations.actions.check_in"), check_in_reservation_path(reservation), method: :patch %>
+      <% end %>
+      <% if reservation.may_check_out? %>
+        <%= button_to t("reservations.actions.check_out"), check_out_reservation_path(reservation), method: :patch %>
+      <% end %>
+      <% if reservation.may_cancel? %>
+        <%= button_to t("reservations.actions.cancel"), cancel_reservation_path(reservation), method: :patch %>
+      <% end %>
+    </div>
+  </td>
+</tr>

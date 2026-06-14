@@ -1,0 +1,18 @@
+<div class="page-head">
+  <h1>
+    <%= property.name %>
+    <% if property.stars.present? %><span class="stars"><%= "★" * property.stars %></span><% end %>
+  </h1>
+  <%= link_to t("properties.show.edit"), edit_property_path(property), class: "btn btn-quiet" %>
+</div>
+
+<p class="address">
+  <%= [ property.street, property.postal_code, property.city, property.country ].select(&:present?).join(", ") %>
+</p>
+
+<nav class="tabs">
+  <%= link_to t("properties.tabs.reservations"), property_reservations_path(property),
+        class: class_names("tab", active: controller_name == "reservations") %>
+  <%= link_to t("properties.tabs.housekeeping"), property_rooms_path(property),
+        class: class_names("tab", active: controller_name == "rooms") %>
+</nav>
