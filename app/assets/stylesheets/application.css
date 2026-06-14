@@ -447,7 +447,8 @@ input[type="submit"]:hover {
 
 .guest-results li { margin: 0; }
 
-.guest-result {
+.guest-result,
+.guest-create {
   display: block;
   width: 100%;
   text-align: left;
@@ -461,10 +462,116 @@ input[type="submit"]:hover {
 }
 
 .guest-result:hover,
-.guest-result:focus { background: var(--iris-tint); }
+.guest-result:focus,
+.guest-create:hover,
+.guest-create:focus {
+  background: var(--iris-tint);
+}
+
 .guest-result .muted { margin-left: 0.4rem; }
 
-.guest-create { margin-top: 0.25rem; }
+.guest-create {
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--iris);
+  font-weight: 600;
+}
+
+/* Flag comboboxes: country picker + phone dial-code picker */
+.combo { position: relative; }
+
+.combo-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font: inherit;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.combo-button:hover { border-color: var(--iris); }
+
+.combo-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.combo-value.muted { color: var(--ink-soft); }
+.combo-caret { color: var(--ink-soft); font-size: 0.7rem; }
+
+.combo-panel {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: 0 12px 28px rgba(20, 16, 60, 0.16);
+}
+
+.combo-search { margin-bottom: 0.35rem; }
+
+.combo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+.combo-list li { margin: 0; }
+
+.combo-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius) - 4px);
+  padding: 0.4rem 0.5rem;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.combo-option:hover { background: var(--iris-tint); }
+.combo-option .dial { margin-left: auto; color: var(--ink-soft); }
+
+.flag {
+  display: inline-block;
+  flex: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  vertical-align: middle;
+}
+
+/* Phone = dial-code combo + local number on one row */
+.phone-field {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.combo-dial { flex: 0 0 auto; min-width: 7.5rem; }
+.combo-dial .combo-value:not(.muted) { gap: 0.35rem; }
+.phone-number { flex: 1; }
 
 /* Signature: room number as a key-fob chip with a punched hole */
 .room-tag {
@@ -568,10 +675,17 @@ input[type="submit"]:hover {
   color: var(--ink-soft);
 }
 
+.form label .required {
+  color: var(--danger, #c0392b);
+  text-decoration: none;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
+input[type="tel"],
+input[type="date"],
 select,
 textarea {
   font: inherit;

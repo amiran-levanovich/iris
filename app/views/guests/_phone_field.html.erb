@@ -1,0 +1,31 @@
+<div class="phone-field" data-controller="phone-field"
+     data-action="click@window->phone-field#closeOnOutside">
+  <%= form.hidden_field :phone, data: { phone_field_target: "hidden" } %>
+
+  <div class="combo combo-dial">
+    <button type="button" class="combo-button" data-action="phone-field#toggle">
+      <span class="combo-value muted" data-phone-field-target="label"><%= t("guests.combo.dial_placeholder") %></span>
+      <span class="combo-caret" aria-hidden="true">▾</span>
+    </button>
+
+    <div class="combo-panel" data-phone-field-target="panel" hidden>
+      <%= tag.input type: "text", class: "combo-search", placeholder: t("guests.combo.search"),
+            autocomplete: "off", data: { phone_field_target: "search", action: "input->phone-field#filter" } %>
+      <ul class="combo-list">
+        <% dialing_country_list.each do |code, name, dial| %>
+          <li>
+            <button type="button" class="combo-option" data-phone-field-target="option"
+                    data-action="phone-field#selectDial" data-dial="<%= dial %>"
+                    data-search="<%= "#{name.downcase} +#{dial}" %>">
+              <%= country_flag_tag(code) %><span><%= name %></span><span class="dial">+<%= dial %></span>
+            </button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <%= tag.input type: "tel", class: "phone-number",
+        placeholder: t("guests.combo.phone_placeholder"),
+        data: { phone_field_target: "number", action: "input->phone-field#recompute" } %>
+</div>

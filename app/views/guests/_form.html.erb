@@ -1,19 +1,46 @@
 <%= form_with model: guest, class: "form" do |form| %>
   <%= render "shared/form_errors", record: guest %>
 
-  <div>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+  <div class="field-row">
+    <div>
+      <%= required_label form, :first_name %>
+      <%= form.text_field :first_name, required: true %>
+    </div>
+    <div>
+      <%= required_label form, :last_name %>
+      <%= form.text_field :last_name, required: true %>
+    </div>
   </div>
 
   <div>
-    <%= form.label :email %>
-    <%= form.email_field :email %>
+    <%= required_label form, :email %>
+    <%= form.email_field :email, required: true %>
   </div>
 
   <div>
     <%= form.label :phone %>
-    <%= form.telephone_field :phone %>
+    <%= render "guests/phone_field", form: form %>
+  </div>
+
+  <div>
+    <%= required_label form, :street %>
+    <%= form.text_field :street, required: true %>
+  </div>
+
+  <div class="field-row">
+    <div>
+      <%= required_label form, :city %>
+      <%= form.text_field :city, required: true %>
+    </div>
+    <div>
+      <%= required_label form, :postal_code %>
+      <%= form.text_field :postal_code, required: true %>
+    </div>
+  </div>
+
+  <div>
+    <%= required_label form, :country %>
+    <%= render "guests/country_field", form: form %>
   </div>
 
   <div>

@@ -1,0 +1,31 @@
+<div class="combo" data-controller="country-select"
+     data-action="click@window->country-select#closeOnOutside">
+  <%= form.hidden_field :country, data: { country_select_target: "hidden" } %>
+
+  <button type="button" class="combo-button" data-action="country-select#toggle">
+    <span class="combo-value<%= " muted" if form.object.country.blank? %>" data-country-select-target="label">
+      <% if form.object.country.present? %>
+        <%= country_flag_tag(form.object.country) %><span><%= country_name(form.object.country) %></span>
+      <% else %>
+        <%= t("guests.combo.country_placeholder") %>
+      <% end %>
+    </span>
+    <span class="combo-caret" aria-hidden="true">▾</span>
+  </button>
+
+  <div class="combo-panel" data-country-select-target="panel" hidden>
+    <%= tag.input type: "text", class: "combo-search", placeholder: t("guests.combo.search"),
+          autocomplete: "off", data: { country_select_target: "search", action: "input->country-select#filter" } %>
+    <ul class="combo-list">
+      <% country_list.each do |code, name, _dial| %>
+        <li>
+          <button type="button" class="combo-option" data-country-select-target="option"
+                  data-action="country-select#select" data-value="<%= code %>"
+                  data-search="<%= name.downcase %>">
+            <%= country_flag_tag(code) %><span><%= name %></span>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

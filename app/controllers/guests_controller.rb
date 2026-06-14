@@ -2,7 +2,8 @@ class GuestsController < ApplicationController
   before_action :set_guest, only: %i[ show edit update ]
 
   def index
-    @guests = params[:q].present? ? Guest.search(params[:q]).order(:name) : Guest.order(:name)
+    scope = params[:q].present? ? Guest.search(params[:q]) : Guest.all
+    @guests = scope.order(:last_name, :first_name)
 
     # The booking guest picker searches into a Turbo Frame; reply with just the
     # results list, not the whole page.
@@ -17,23 +18,18 @@ class GuestsController < ApplicationController
   end
 
   def new
-    @guest = Guest.new
+    # The booking picker links here with the typed name split into first/last so
+    # the operator only fills the remaining required fields.
+    @guest = Guest.new(prefill_params)
   end
 
   def create
     @guest = Guest.new(guest_params)
-    saved = @guest.save
 
-    respond_to do |format|
-      # Inline create from the booking picker: select the new guest in place.
-      format.turbo_stream { render :create, status: saved ? :ok : :unprocessable_entity }
-      format.html do
-        if saved
-          redirect_to @guest, notice: t(".notice")
-        else
-          render :new, status: :unprocessable_entity
-        end
-      end
+    if @guest.save
+      redirect_to @guest, notice: t(".notice")
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -55,6 +51,12 @@ class GuestsController < ApplicationController
   end
 
   def guest_params
-    params.expect(guest: [ :name, :email, :phone ])
+    params.expect(guest: [ :first_name, :last_name, :email, :phone, :street, :city, :postal_code, :country ])
+  end
+
+  def prefill_params
+    return {} unless params[:guest]
+
+    params.expect(guest: [ :first_name, :last_name ])
   end
 end

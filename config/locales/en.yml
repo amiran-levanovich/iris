@@ -29,9 +29,14 @@ en:
           cleaning: Cleaning
           out_of_service: Out of service
       guest:
-        name: Name
+        first_name: First name
+        last_name: Last name
         email: Email
         phone: Phone
+        street: Street
+        city: City
+        postal_code: Postal code
+        country: Country
       reservation:
         guest: Guest
         room: Room
@@ -55,6 +60,9 @@ en:
     currency:
       format:
         unit: "€"
+
+  forms:
+    required: required
 
   layouts:
     application:
@@ -116,6 +124,11 @@ en:
     picker:
       search_placeholder: Search by name…
       create: Create “%{name}”
+    combo:
+      country_placeholder: Select a country…
+      dial_placeholder: Code
+      phone_placeholder: Phone number
+      search: Search…
     index:
       title: Guests
       new_guest: New guest
