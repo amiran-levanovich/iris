@@ -18,6 +18,20 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
+  describe "internal_id" do
+    it "is generated on create when none is provided" do
+      reservation = create(:reservation, internal_id: nil)
+
+      expect(reservation.internal_id).to match(/\A[A-Z2-9]{6}\z/)
+    end
+
+    it "keeps an explicitly provided code" do
+      reservation = create(:reservation, internal_id: "K7Q2X9")
+
+      expect(reservation.internal_id).to eq("K7Q2X9")
+    end
+  end
+
   describe "lifecycle" do
     it "starts booked" do
       expect(build(:reservation)).to be_booked
@@ -79,8 +93,8 @@ RSpec.describe Reservation, type: :model do
 
   describe ".filtered" do
     let(:room) { create(:room) }
-    let!(:early) { create(:reservation, room: room, check_in_on: Date.new(2026, 6, 1), check_out_on: Date.new(2026, 6, 4)) }
-    let!(:late) { create(:reservation, :checked_in, room: room, check_in_on: Date.new(2026, 7, 1), check_out_on: Date.new(2026, 7, 5)) }
+    let!(:early) { create(:reservation, room: room, internal_id: "AAAAAA", check_in_on: Date.new(2026, 6, 1), check_out_on: Date.new(2026, 6, 4)) }
+    let!(:late) { create(:reservation, :checked_in, room: room, internal_id: "ZZZZZZ", check_in_on: Date.new(2026, 7, 1), check_out_on: Date.new(2026, 7, 5)) }
 
     it "returns everything when no filters are given" do
       expect(Reservation.filtered).to contain_exactly(early, late)
@@ -96,8 +110,10 @@ RSpec.describe Reservation, type: :model do
       expect(Reservation.filtered(status: "checked_in")).to contain_exactly(late)
     end
 
-    it "filters by id" do
-      expect(Reservation.filtered(id: late.id)).to contain_exactly(late)
+    it "filters by code, case-insensitively and partially" do
+      expect(Reservation.filtered(code: late.internal_id)).to contain_exactly(late)
+      expect(Reservation.filtered(code: late.internal_id.downcase)).to contain_exactly(late)
+      expect(Reservation.filtered(code: late.internal_id[0, 3])).to contain_exactly(late)
     end
 
     it "ignores blank filters" do

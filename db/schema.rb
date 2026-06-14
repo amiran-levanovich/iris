@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_14_145332) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_152052) do
   create_table "guests", force: :cascade do |t|
     t.string "city"
     t.string "country"
@@ -42,11 +42,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_145332) do
     t.date "check_out_on", null: false
     t.datetime "created_at", null: false
     t.integer "guest_id", null: false
+    t.string "internal_id", null: false
     t.integer "nightly_rate_cents", null: false
     t.integer "room_id", null: false
     t.string "status", default: "booked", null: false
     t.datetime "updated_at", null: false
     t.index ["guest_id"], name: "index_reservations_on_guest_id"
+    t.index ["internal_id"], name: "index_reservations_on_internal_id", unique: true
     t.index ["room_id", "check_in_on"], name: "index_reservations_on_room_id_and_check_in_on"
     t.index ["room_id"], name: "index_reservations_on_room_id"
     t.index ["status"], name: "index_reservations_on_status"

@@ -1,5 +1,5 @@
 <tr>
-  <td class="num">#<%= reservation.id %></td>
+  <td class="num"><%= reservation.internal_id %></td>
   <td><%= link_to reservation.guest.name, guest_path(reservation.guest) %></td>
   <td><span class="room-tag"><%= reservation.room.number %></span></td>
   <td><%= l reservation.check_in_on %></td>

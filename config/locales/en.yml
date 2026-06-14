@@ -160,10 +160,11 @@ en:
       empty_arrivals: No arrivals today.
       empty_departures: No departures today.
       empty_in_house: No guests in house.
+      code: Code
       date_from: From
       date_to: To
       all_statuses: All statuses
-      search_placeholder: Reservation #
+      search_placeholder: Reservation code
       apply: Apply
       reset: Reset
       empty: No reservations match these filters.
