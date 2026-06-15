@@ -19,6 +19,8 @@ module Reservations
     def call
       # Single writer (SQLite) makes this check-then-create race-safe locally;
       # availability lives in one place — the Room.available_between scope.
+      raise PastDateError if @stay_period.starts_in_past?
+
       Reservation.transaction do
         raise RoomUnavailableError unless Room.available_between(@stay_period).exists?(@room.id)
 

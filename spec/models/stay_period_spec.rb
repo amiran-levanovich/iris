@@ -42,4 +42,24 @@ RSpec.describe StayPeriod do
       expect(period(1, 3).overlaps?(period(10, 12))).to be(false)
     end
   end
+
+  describe "#starts_in_past?" do
+    it "is true when check-in is before today" do
+      stay = described_class.new(check_in: Date.current.prev_day, check_out: Date.current.next_day)
+
+      expect(stay).to be_starts_in_past
+    end
+
+    it "is false for a same-day (walk-in) check-in" do
+      stay = described_class.new(check_in: Date.current, check_out: Date.current.next_day)
+
+      expect(stay).not_to be_starts_in_past
+    end
+
+    it "is false for a future check-in" do
+      stay = described_class.new(check_in: Date.current.next_day, check_out: Date.current.next_day(3))
+
+      expect(stay).not_to be_starts_in_past
+    end
+  end
 end

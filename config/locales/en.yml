@@ -241,6 +241,7 @@ en:
       notice: Reservation booked.
       unavailable: That room is no longer available for those dates.
       incomplete: Select a guest and a room before booking.
+      past_date: Check-in can't be in the past. Pick today or a later date.
     check_in:
       notice: Guest checked in.
     check_out:

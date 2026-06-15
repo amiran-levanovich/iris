@@ -7,7 +7,7 @@
   <div class="field-row">
     <div>
       <%= form.label :check_in_on, Reservation.human_attribute_name(:check_in_on) %>
-      <%= form.date_field :check_in_on, value: @stay_period.check_in,
+      <%= form.date_field :check_in_on, value: @stay_period.check_in, min: Date.current,
             data: { availability_target: "date", action: "availability#refresh" } %>
     </div>
     <div>

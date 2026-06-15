@@ -47,6 +47,10 @@ class ReservationsController < ApplicationController
     setup_booking_form
     flash.now[:alert] = t(".unavailable")
     render :new, status: :unprocessable_entity
+  rescue Reservations::PastDateError
+    setup_booking_form
+    flash.now[:alert] = t(".past_date")
+    render :new, status: :unprocessable_entity
   rescue ActiveRecord::RecordInvalid => error
     @reservation = error.record
     setup_booking_form

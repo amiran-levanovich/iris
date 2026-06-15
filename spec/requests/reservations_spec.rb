@@ -13,8 +13,8 @@ RSpec.describe "Reservations", type: :request do
       reservation: {
         guest_id: guest.id,
         room_id: room.id,
-        check_in_on: "2026-06-10",
-        check_out_on: "2026-06-13"
+        check_in_on: Date.current.next_day(5).iso8601,
+        check_out_on: Date.current.next_day(8).iso8601
       }.merge(overrides)
     }
   end
@@ -55,7 +55,8 @@ RSpec.describe "Reservations", type: :request do
     it "renders the booking form with available rooms" do
       room
 
-      get new_property_reservation_path(property), params: { check_in_on: "2026-06-10", check_out_on: "2026-06-13" }
+      get new_property_reservation_path(property),
+          params: { check_in_on: Date.current.next_day(5).iso8601, check_out_on: Date.current.next_day(8).iso8601 }
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(room.number)
@@ -86,7 +87,7 @@ RSpec.describe "Reservations", type: :request do
     context "when the room is already booked for the dates" do
       it "re-renders the form without booking" do
         create(:reservation, room: room, guest: guest,
-               check_in_on: Date.new(2026, 6, 11), check_out_on: Date.new(2026, 6, 14))
+               check_in_on: Date.current.next_day(6), check_out_on: Date.current.next_day(9))
 
         expect {
           post property_reservations_path(property), params: booking_params
@@ -99,10 +100,22 @@ RSpec.describe "Reservations", type: :request do
     context "with an invalid date range" do
       it "re-renders the form" do
         expect {
-          post property_reservations_path(property), params: booking_params(check_out_on: "2026-06-10")
+          post property_reservations_path(property), params: booking_params(check_out_on: Date.current.next_day(5).iso8601)
         }.not_to change(Reservation, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "with a check-in date in the past" do
+      it "re-renders the form with an alert instead of booking" do
+        expect {
+          post property_reservations_path(property),
+               params: booking_params(check_in_on: Date.current.prev_day.iso8601)
+        }.not_to change(Reservation, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(flash[:alert]).to be_present
       end
     end
 
