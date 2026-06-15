@@ -1,5 +1,12 @@
 # Review Log
 
+## 2026-06-15 — New guest during booking (branch fix/new-guest-during-booking)
+- **Scope**: 11 files; controllers, helper, Stimulus JS, views, specs (return_to round-trip so creating a guest mid-booking returns to the booking with it pre-selected)
+- **Atoms**: clean-code, architecture, secure-coding, test-quality
+- **Result**: 0 critical, 1 warning, 2 suggestion (all fixed)
+- **Key findings**: open-redirect guard missed the "/\host" backslash variant (browsers normalise it protocol-relative; Rails allow_other_host doesn't catch it) — tightened to `%r{\A/[^/\\]}`; guard relocated from view helper to ApplicationController (helper-as-controller-logic); backslash spec added
+- **Strengths**: round-trip was open-redirect-aware from the start; JS degrades gracefully; promoting guest→@guest also fixed selection-loss on booking validation errors
+
 ## 2026-06-15 — Maintenance Requests (branch feature/maintenance-requests)
 - **Scope**: 21 files; model, services, controllers, views, routes, i18n, css, specs (new aggregate + cross-aggregate room-status coupling)
 - **Atoms**: clean-code, architecture, domain-driven-design, secure-coding, test-quality

@@ -14,7 +14,8 @@
       <% first_name, last_name = query.split(" ", 2) %>
       <li>
         <%= link_to t("guests.picker.create", name: query),
-              new_guest_path(guest: { first_name: first_name, last_name: last_name }),
+              new_guest_path(guest: { first_name: first_name, last_name: last_name },
+                             return_to: local_assigns[:return_to]),
               class: "guest-create", data: { turbo_frame: "_top" } %>
       </li>
     <% end %>

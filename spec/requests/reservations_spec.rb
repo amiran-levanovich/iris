@@ -60,6 +60,15 @@ RSpec.describe "Reservations", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(room.number)
     end
+
+    it "pre-selects the guest passed back from creating one mid-booking" do
+      guest = create(:guest, first_name: "Ada", last_name: "Lovelace")
+
+      get new_property_reservation_path(property), params: { guest_id: guest.id }
+
+      expect(response.body).to include(%(value="#{guest.id}"))
+      expect(response.body).to include("Ada Lovelace")
+    end
   end
 
   describe "POST /properties/:property_id/reservations" do

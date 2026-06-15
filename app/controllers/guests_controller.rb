@@ -9,7 +9,8 @@ class GuestsController < ApplicationController
     # results list, not the whole page.
     if turbo_frame_request_id == "guest_results"
       render partial: "guests/picker_results",
-             locals: { guests: @guests, query: params[:q].to_s }, layout: false
+             locals: { guests: @guests, query: params[:q].to_s, return_to: params[:return_to] },
+             layout: false
     end
   end
 
@@ -27,7 +28,9 @@ class GuestsController < ApplicationController
     @guest = Guest.new(guest_params)
 
     if @guest.save
-      redirect_to @guest, notice: t(".notice")
+      # When the picker sent us here mid-booking, return to that booking form
+      # with the new guest pre-selected; otherwise show the guest.
+      redirect_to booking_return_path || @guest, notice: t(".notice")
     else
       render :new, status: :unprocessable_entity
     end
@@ -58,5 +61,20 @@ class GuestsController < ApplicationController
     return {} unless params[:guest]
 
     params.expect(guest: [ :first_name, :last_name ])
+  end
+
+  # The booking form to return to after creating a guest, with the new guest's
+  # id appended so the picker shows it selected. nil unless a safe local
+  # return_to was supplied.
+  def booking_return_path
+    target = safe_internal_path(params[:return_to], nil)
+    return nil unless target
+
+    uri = URI.parse(target)
+    query = URI.decode_www_form(uri.query || "") << [ "guest_id", @guest.id ]
+    uri.query = URI.encode_www_form(query)
+    uri.to_s
+  rescue URI::InvalidURIError
+    nil
   end
 end

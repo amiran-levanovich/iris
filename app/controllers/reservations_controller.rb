@@ -25,21 +25,23 @@ class ReservationsController < ApplicationController
   def new
     @stay_period = stay_period_from(params)
     @rooms = @property.rooms.available_between(@stay_period)
+    # Pre-select a guest when returning from creating one mid-booking.
+    @guest = Guest.find_by(id: params[:guest_id]) if params[:guest_id].present?
   end
 
   def create
     booking = reservation_params
     @stay_period = stay_period_from(booking)
     room = @property.rooms.find_by(id: booking[:room_id])
-    guest = Guest.find_by(id: booking[:guest_id])
+    @guest = Guest.find_by(id: booking[:guest_id])
 
-    if guest.nil? || room.nil?
+    if @guest.nil? || room.nil?
       setup_booking_form
       flash.now[:alert] = t(".incomplete")
       return render :new, status: :unprocessable_entity
     end
 
-    Reservations::BookRoom.call(room:, guest:, stay_period: @stay_period)
+    Reservations::BookRoom.call(room:, guest: @guest, stay_period: @stay_period)
     redirect_to property_reservations_path(@property), notice: t(".notice")
   rescue Reservations::RoomUnavailableError
     setup_booking_form

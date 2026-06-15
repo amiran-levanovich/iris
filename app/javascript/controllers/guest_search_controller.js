@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
 // offers a link to the full new-guest form.
 export default class extends Controller {
   static targets = ["input", "results", "hidden", "display"]
-  static values = { url: String }
+  static values = { url: String, returnTo: String }
 
   search() {
     clearTimeout(this.timeout)
@@ -15,8 +15,27 @@ export default class extends Controller {
         this.close()
         return
       }
-      this.resultsTarget.src = `${this.urlValue}?q=${encodeURIComponent(query)}`
+      const params = new URLSearchParams({ q: query })
+      const returnTo = this.bookingReturnPath()
+      if (returnTo) params.set("return_to", returnTo)
+      this.resultsTarget.src = `${this.urlValue}?${params}`
     }, 250)
+  }
+
+  // Path back to the current booking form, carrying the dates the operator has
+  // entered, so a "create new guest" detour can return here with them intact.
+  bookingReturnPath() {
+    if (!this.hasReturnToValue || this.returnToValue === "") return null
+
+    const url = new URL(this.returnToValue, window.location.origin)
+    const form = this.element.closest("form")
+    if (form) {
+      const checkIn = form.querySelector('[name="reservation[check_in_on]"]')?.value
+      const checkOut = form.querySelector('[name="reservation[check_out_on]"]')?.value
+      if (checkIn) url.searchParams.set("check_in_on", checkIn)
+      if (checkOut) url.searchParams.set("check_out_on", checkOut)
+    }
+    return url.pathname + url.search
   }
 
   // The search box lives inside the booking form; Enter would otherwise submit
