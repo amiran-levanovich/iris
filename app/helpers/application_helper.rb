@@ -6,6 +6,19 @@ module ApplicationHelper
     record.class.human_attribute_name("#{enum_name.to_s.pluralize}.#{value}")
   end
 
+  # Safe "back" target for a page reachable from several lists (e.g. a guest
+  # linked from the guests index, reservation rows, or the housekeeping board):
+  # return to the referring page when it is same-origin, otherwise the fallback.
+  def safe_back_path(fallback)
+    referer = request.referer
+    return fallback if referer.blank?
+
+    uri = URI.parse(referer)
+    uri.host == request.host && uri.port == request.port ? uri.request_uri : fallback
+  rescue URI::InvalidURIError
+    fallback
+  end
+
   # Coloured pill for a reservation's lifecycle state. The status column is an
   # AASM state, not a Rails enum, but human_enum resolves it the same way.
   def reservation_status_tag(reservation)

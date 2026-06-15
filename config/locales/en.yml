@@ -195,7 +195,7 @@ en:
       empty: No guests yet. Add the first guest to start booking stays.
     show:
       edit: Edit guest
-      back: Back to guests
+      back: Back
       stays: Stay history
       property: Property
       empty_stays: No stays yet for this guest.

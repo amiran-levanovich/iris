@@ -23,6 +23,28 @@ RSpec.describe "Guests", type: :request do
     end
   end
 
+  describe "GET /guests/:id back link" do
+    let(:guest) { create(:guest) }
+
+    it "returns to the referring page when it is same-origin" do
+      get guest_path(guest), headers: { "HTTP_REFERER" => "http://www.example.com/properties/1/reservations" }
+
+      expect(response.body).to include('href="/properties/1/reservations"')
+    end
+
+    it "falls back to the guests index without a referer" do
+      get guest_path(guest)
+
+      expect(response.body).to include(%(href="#{guests_path}"))
+    end
+
+    it "ignores a cross-origin referer" do
+      get guest_path(guest), headers: { "HTTP_REFERER" => "http://evil.test/phish" }
+
+      expect(response.body).not_to include("evil.test")
+    end
+  end
+
   describe "GET /guests?q= (booking picker search)" do
     it "returns only the picker results for a Turbo Frame request" do
       create(:guest, first_name: "Ada", last_name: "Lovelace")

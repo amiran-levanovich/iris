@@ -44,4 +44,4 @@
   <p class="empty"><%= t(".empty_stays") %></p>
 <% end %>
 
-<%= link_to t(".back"), guests_path, class: "back-link" %>
+<%= link_to t(".back"), safe_back_path(guests_path), class: "back-link" %>
