@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_14_152052) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_120000) do
   create_table "guests", force: :cascade do |t|
     t.string "city"
     t.string "country"
@@ -23,6 +23,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_152052) do
     t.string "street"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_guests_on_email", unique: true, where: "email IS NOT NULL"
+  end
+
+  create_table "maintenance_requests", force: :cascade do |t|
+    t.integer "assignee_id"
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "priority", default: "medium", null: false
+    t.integer "room_id", null: false
+    t.string "status", default: "open", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_maintenance_requests_on_assignee_id"
+    t.index ["room_id", "status"], name: "index_maintenance_requests_on_room_id_and_status"
+    t.index ["room_id"], name: "index_maintenance_requests_on_room_id"
   end
 
   create_table "properties", force: :cascade do |t|
@@ -86,6 +101,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_152052) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "maintenance_requests", "rooms"
+  add_foreign_key "maintenance_requests", "users", column: "assignee_id"
   add_foreign_key "reservations", "guests"
   add_foreign_key "reservations", "rooms"
   add_foreign_key "rooms", "properties"

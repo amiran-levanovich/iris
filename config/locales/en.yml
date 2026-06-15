@@ -49,6 +49,32 @@ en:
           checked_in: Checked in
           checked_out: Checked out
           cancelled: Cancelled
+      maintenance_request:
+        title: Title
+        description: Description
+        category: Category
+        priority: Priority
+        status: Status
+        assignee: Assignee
+        assignee_id: Assignee
+        categories:
+          plumbing: Plumbing
+          electrical: Electrical
+          hvac: HVAC
+          appliance: Appliance
+          furniture: Furniture
+          structural: Structural
+          other: Other
+        priorities:
+          low: Low
+          medium: Medium
+          high: High
+          urgent: Urgent
+        statuses:
+          open: Open
+          in_progress: In progress
+          resolved: Resolved
+          cancelled: Cancelled
     errors:
       models:
         reservation:
@@ -106,6 +132,10 @@ en:
       empty_rooms: No rooms yet. Add the first room to build this property's inventory.
     room:
       edit: Edit
+      maintenance: Maintenance
+      maintenance_open:
+        one: "⚠ %{count} open"
+        other: "⚠ %{count} open"
     new:
       title: "New room — %{property}"
       back: Back to property
@@ -119,6 +149,36 @@ en:
     status:
       notice: Room status updated.
       alert: Unknown room status.
+
+  maintenance_requests:
+    index:
+      title: "Maintenance — Room %{number}"
+      new: New request
+      empty: No maintenance requests for this room.
+    new:
+      title: "New maintenance request — Room %{number}"
+      back: Back to maintenance
+    edit:
+      title: Edit maintenance request
+      back: Back to maintenance
+    form:
+      unassigned: Unassigned
+    maintenance_request:
+      start: Start
+      resolve: Resolve
+      cancel: Cancel
+      edit: Edit
+    create:
+      notice: Maintenance request opened. Room taken out of service.
+    update:
+      notice: Maintenance request updated.
+    start:
+      notice: Work started.
+    resolve:
+      notice: Maintenance request resolved.
+    cancel:
+      notice: Maintenance request cancelled.
+    invalid_transition: That maintenance action is not allowed right now.
 
   guests:
     picker:

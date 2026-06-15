@@ -1,0 +1,35 @@
+<%= form_with model: maintenance_request, url: url do |f| %>
+  <%= render "shared/form_errors", record: maintenance_request %>
+
+  <div class="field">
+    <%= required_label(f, :title) %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description, rows: 3 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :category %>
+    <%= f.select :category,
+          MaintenanceRequest.categories.keys.map { |value| [ human_enum(maintenance_request, :category, value), value ] } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :priority %>
+    <%= f.select :priority,
+          MaintenanceRequest.priorities.keys.map { |value| [ human_enum(maintenance_request, :priority, value), value ] } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :assignee_id %>
+    <%= f.collection_select :assignee_id, User.order(:email_address), :id, :email_address,
+          include_blank: t(".unassigned") %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

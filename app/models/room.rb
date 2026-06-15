@@ -1,6 +1,7 @@
 class Room < ApplicationRecord
   belongs_to :property
   has_many :reservations, dependent: :restrict_with_error
+  has_many :maintenance_requests, dependent: :restrict_with_error
 
   enum :room_type, {
     single: "single",

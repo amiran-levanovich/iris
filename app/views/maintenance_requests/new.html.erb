@@ -1,0 +1,9 @@
+<%= render "properties/tabs", property: @room.property %>
+
+<div class="page-head">
+  <h2><%= t(".title", number: @room.number) %></h2>
+</div>
+
+<%= render "form", maintenance_request: @maintenance_request, url: room_maintenance_requests_path(@room) %>
+
+<p><%= link_to t(".back"), room_maintenance_requests_path(@room), class: "btn btn-quiet" %></p>

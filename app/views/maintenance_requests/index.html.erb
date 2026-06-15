@@ -1,0 +1,26 @@
+<%= render "properties/tabs", property: @room.property %>
+
+<div class="page-head">
+  <h2><%= t(".title", number: @room.number) %></h2>
+  <%= link_to t(".new"), new_room_maintenance_request_path(@room), class: "btn" %>
+</div>
+
+<% if @maintenance_requests.any? %>
+  <table class="room-board">
+    <thead>
+      <tr>
+        <th><%= MaintenanceRequest.human_attribute_name(:title) %></th>
+        <th><%= MaintenanceRequest.human_attribute_name(:category) %></th>
+        <th><%= MaintenanceRequest.human_attribute_name(:priority) %></th>
+        <th><%= MaintenanceRequest.human_attribute_name(:status) %></th>
+        <th><%= MaintenanceRequest.human_attribute_name(:assignee) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "maintenance_request", collection: @maintenance_requests %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="empty"><%= t(".empty") %></p>
+<% end %>

@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= render partial: "rooms/room", collection: @property.rooms, locals: { current_reservations: @current_reservations } %>
+      <%= render partial: "rooms/room", collection: @property.rooms, locals: { current_reservations: @current_reservations, maintenance_counts: @maintenance_counts } %>
     </tbody>
   </table>
 <% else %>
