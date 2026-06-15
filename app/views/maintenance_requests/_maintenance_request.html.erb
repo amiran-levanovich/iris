@@ -1,0 +1,32 @@
+<tr>
+  <td>
+    <%= maintenance_request.title %>
+    <% if maintenance_request.description.present? %>
+      <div class="muted"><%= maintenance_request.description %></div>
+    <% end %>
+  </td>
+  <td><%= human_enum(maintenance_request, :category) %></td>
+  <td><span class="status status-priority-<%= maintenance_request.priority %>"><%= human_enum(maintenance_request, :priority) %></span></td>
+  <td><span class="status status-<%= maintenance_request.status %>"><%= human_enum(maintenance_request, :status) %></span></td>
+  <td>
+    <% if maintenance_request.assignee %>
+      <%= maintenance_request.assignee.email_address %>
+    <% else %>
+      <span class="muted">—</span>
+    <% end %>
+  </td>
+  <td>
+    <div class="room-actions">
+      <% if maintenance_request.may_start? %>
+        <%= button_to t(".start"), start_maintenance_request_path(maintenance_request), method: :patch %>
+      <% end %>
+      <% if maintenance_request.may_resolve? %>
+        <%= button_to t(".resolve"), resolve_maintenance_request_path(maintenance_request), method: :patch %>
+      <% end %>
+      <% if maintenance_request.may_cancel? %>
+        <%= button_to t(".cancel"), cancel_maintenance_request_path(maintenance_request), method: :patch %>
+      <% end %>
+      <%= link_to t(".edit"), edit_maintenance_request_path(maintenance_request), class: "btn" %>
+    </div>
+  </td>
+</tr>

@@ -617,6 +617,26 @@ input[type="submit"]:hover {
 .status-checked_out { color: var(--ink-soft); background: var(--paper); }
 .status-cancelled { color: var(--down); background: var(--down-tint); }
 
+/* Maintenance request lifecycle */
+.status-open { color: var(--iris); background: var(--iris-tint); }
+.status-in_progress { color: #9a7314; background: var(--signal-tint); }
+.status-resolved { color: var(--ok); background: var(--ok-tint); }
+/* .status-cancelled reused above */
+
+/* Maintenance request priority */
+.status-priority-low { color: var(--ink-soft); background: var(--paper); }
+.status-priority-medium { color: var(--iris); background: var(--iris-tint); }
+.status-priority-high { color: #9a7314; background: var(--signal-tint); }
+.status-priority-urgent { color: var(--down); background: var(--down-tint); }
+
+/* Active-maintenance flag on the housekeeping board */
+.maintenance-flag {
+  margin-left: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--down);
+}
+
 .room-actions {
   display: flex;
   gap: 0.4rem;

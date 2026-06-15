@@ -1,5 +1,12 @@
 # Review Log
 
+## 2026-06-15 — Maintenance Requests (branch feature/maintenance-requests)
+- **Scope**: 21 files; model, services, controllers, views, routes, i18n, css, specs (new aggregate + cross-aggregate room-status coupling)
+- **Atoms**: clean-code, architecture, domain-driven-design, secure-coding, test-quality
+- **Result**: 0 critical, 1 warning, 1 suggestion (both fixed)
+- **Key findings**: crafted assignee_id for a missing user hit the DB FK → 500 not 422 (fixed: model `assignee_must_exist` validation); maintenance_requests used `dependent: :destroy` vs reservations' `:restrict_with_error` (fixed: aligned)
+- **Strengths**: OpenRequest/CloseRequest own transactions with "release room iff no other active" guard; CheckOut patched so checkout can't drop an active maintenance block; active_for queried inside the service, not reached from Room
+
 ## 2026-06-13 — Property Ops Overview (branch feature/property-ops-overview, a5af33b)
 - **Scope**: 14 files; controllers, views, routes, i18n, css, specs (presentation + read-query redesign)
 - **Atoms**: clean-code, architecture, secure-coding, test-quality

@@ -8,6 +8,10 @@ class RoomsController < ApplicationController
                                        .where(room: @property.rooms)
                                        .includes(:guest)
                                        .index_by(&:room_id)
+    @maintenance_counts = MaintenanceRequest.active
+                                            .where(room: @property.rooms)
+                                            .group(:room_id)
+                                            .count
   end
 
   def new

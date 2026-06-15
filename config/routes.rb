@@ -9,6 +9,14 @@ Rails.application.routes.draw do
       member do
         patch :status
       end
+
+      resources :maintenance_requests, only: %i[ index new create edit update ] do
+        member do
+          patch :start
+          patch :resolve
+          patch :cancel
+        end
+      end
     end
 
     resources :reservations, only: %i[ index new create ], shallow: true do

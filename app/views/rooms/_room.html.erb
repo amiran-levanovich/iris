@@ -4,7 +4,13 @@
   <td><%= room.capacity %></td>
   <td class="num"><%= number_to_currency(room.nightly_rate_cents / 100.0) %></td>
   <td class="num"><%= room.floor %></td>
-  <td><span class="status status-<%= room.status %>"><%= human_enum(room, :status) %></span></td>
+  <td>
+    <span class="status status-<%= room.status %>"><%= human_enum(room, :status) %></span>
+    <% if (count = maintenance_counts[room.id].to_i).positive? %>
+      <%= link_to t("rooms.room.maintenance_open", count: count),
+            room_maintenance_requests_path(room), class: "maintenance-flag" %>
+    <% end %>
+  </td>
   <td>
     <% if (reservation = current_reservations[room.id]) %>
       <%= link_to reservation.guest.name, guest_path(reservation.guest) %>
@@ -15,6 +21,7 @@
   <td>
     <div class="room-actions">
       <%= link_to t(".edit"), edit_room_path(room), class: "btn" %>
+      <%= link_to t(".maintenance"), room_maintenance_requests_path(room), class: "btn btn-quiet" %>
       <% (Room.statuses.keys - [ room.status ]).each do |target| %>
         <%= button_to human_enum(room, :status, target), status_room_path(room, status: target), method: :patch %>
       <% end %>
