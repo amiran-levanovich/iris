@@ -15,4 +15,10 @@ StayPeriod = Data.define(:check_in, :check_out) do
   def overlaps?(other)
     check_in < other.check_out && other.check_in < check_out
   end
+
+  # A stay that begins before today. Same-day (walk-in) arrivals are fine; only
+  # a check-in strictly in the past is rejected. Used to block backdated bookings.
+  def starts_in_past?(today = Date.current)
+    check_in.present? && check_in < today
+  end
 end
