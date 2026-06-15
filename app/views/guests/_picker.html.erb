@@ -1,12 +1,14 @@
-<div class="guest-picker" data-controller="guest-search" data-guest-search-url-value="<%= guests_path %>">
+<div class="guest-picker" data-controller="guest-search"
+     data-guest-search-url-value="<%= guests_path %>"
+     data-guest-search-return-to-value="<%= local_assigns[:return_to] %>">
   <%= label_tag :guest_query, Reservation.human_attribute_name(:guest) %>
   <div class="guest-search-field">
-    <%= text_field_tag :guest_query, nil, placeholder: t("guests.picker.search_placeholder"),
+    <%= text_field_tag :guest_query, guest&.name, placeholder: t("guests.picker.search_placeholder"),
           autocomplete: "off",
           data: { guest_search_target: "input",
                   action: "input->guest-search#search keydown.enter->guest-search#preventSubmit blur->guest-search#hide" } %>
     <%= turbo_frame_tag "guest_results", class: "guest-dropdown", data: { guest_search_target: "results" } %>
   </div>
 
-  <%= render "guests/selection", guest: nil %>
+  <%= render "guests/selection", guest: guest %>
 </div>

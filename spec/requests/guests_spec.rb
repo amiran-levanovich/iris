@@ -76,6 +76,32 @@ RSpec.describe "Guests", type: :request do
         expect(Guest.last).to have_attributes(street: "5 Rustaveli Ave", city: "Tbilisi",
                                               postal_code: "0108", country: "GE")
       end
+
+      it "returns to the booking form with the new guest when return_to is given" do
+        property = create(:property)
+
+        post guests_path, params: {
+          guest: guest_attributes,
+          return_to: new_property_reservation_path(property, check_in_on: "2026-07-01", check_out_on: "2026-07-04")
+        }
+
+        expect(response).to redirect_to(
+          new_property_reservation_path(property, check_in_on: "2026-07-01", check_out_on: "2026-07-04",
+                                                  guest_id: Guest.last.id)
+        )
+      end
+
+      it "ignores an off-site return_to (open-redirect guard)" do
+        post guests_path, params: { guest: guest_attributes, return_to: "//evil.test/phish" }
+
+        expect(response).to redirect_to(guest_path(Guest.last))
+      end
+
+      it "ignores the slash-backslash open-redirect variant" do
+        post guests_path, params: { guest: guest_attributes, return_to: "/\\evil.test/phish" }
+
+        expect(response).to redirect_to(guest_path(Guest.last))
+      end
     end
 
     context "with missing required fields" do

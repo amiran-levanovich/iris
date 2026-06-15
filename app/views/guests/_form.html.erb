@@ -1,5 +1,8 @@
 <%= form_with model: guest, class: "form" do |form| %>
   <%= render "shared/form_errors", record: guest %>
+  <% if local_assigns[:return_to].present? %>
+    <%= hidden_field_tag :return_to, return_to %>
+  <% end %>
 
   <div class="field-row">
     <div>

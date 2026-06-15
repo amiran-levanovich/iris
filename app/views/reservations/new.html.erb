@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <%= render "guests/picker" %>
+  <%= render "guests/picker", guest: @guest, return_to: new_property_reservation_path(@property) %>
 
   <div>
     <%= form.label :room_id, Reservation.human_attribute_name(:room) %>
