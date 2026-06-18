@@ -42,7 +42,7 @@ gem "aasm", "~> 5.5"
 
 # ISO 3166 country data (names, alpha-2, dial codes) for the guest address +
 # phone pickers [https://github.com/countries/countries]
-gem "countries", "~> 7.0"
+gem "countries", "~> 8.1"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
